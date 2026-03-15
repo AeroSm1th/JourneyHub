@@ -279,7 +279,7 @@
 
 ### 8. 城市记录管理功能
 
-- [ ] 8.1 创建城市 API 封装
+- [x] 8.1 创建城市 API 封装
   - 在 `src/features/cities/api.ts` 封装城市 CRUD 操作
   - 实现 getAll、getById、create、update、delete、search 函数
   - _需求: 3.5, 3.8, 3.9_
