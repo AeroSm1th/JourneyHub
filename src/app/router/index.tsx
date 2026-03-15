@@ -12,6 +12,9 @@ import { AuthLayout } from '@/app/layouts/AuthLayout';
 import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
 import Homepage from '@/pages/Homepage';
+import { MapPage } from '@/pages/map/MapPage';
+import CitiesPage from '@/pages/cities/CitiesPage';
+import CityDetailPage from '@/pages/cities/CityDetailPage';
 
 /**
  * 应用路由配置
@@ -66,15 +69,15 @@ export const router = createBrowserRouter([
       },
       {
         path: 'map',
-        element: <div>地图页面（待实现）</div>,
+        element: <MapPage />,
       },
       {
         path: 'cities',
-        element: <div>城市列表页面（待实现）</div>,
+        element: <CitiesPage />,
       },
       {
         path: 'cities/:cityId',
-        element: <div>城市详情页面（待实现）</div>,
+        element: <CityDetailPage />,
       },
       {
         path: 'wishlist',

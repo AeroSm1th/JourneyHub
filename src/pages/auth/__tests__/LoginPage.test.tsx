@@ -69,16 +69,16 @@ describe('LoginPage', () => {
     const user = userEvent.setup();
     renderLoginPage();
 
-    const emailInput = screen.getByLabelText('邮箱地址');
+    const passwordInput = screen.getByLabelText('密码');
     const submitButton = screen.getByRole('button', { name: /登录/i });
 
-    // 输入无效邮箱
-    await user.type(emailInput, 'invalid-email');
+    // 只输入密码，不输入邮箱，直接提交
+    await user.type(passwordInput, 'password123');
     await user.click(submitButton);
 
-    // 等待验证错误显示
+    // 等待验证错误显示（空邮箱触发 "邮箱不能为空" 错误）
     await waitFor(() => {
-      expect(screen.getByText(/请输入有效的邮箱地址/i)).toBeInTheDocument();
+      expect(screen.getByText(/邮箱不能为空/i)).toBeInTheDocument();
     });
   });
 

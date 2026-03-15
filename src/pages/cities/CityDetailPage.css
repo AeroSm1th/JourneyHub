@@ -1,0 +1,126 @@
+/**
+ * 城市详情页面样式
+ */
+
+.city-detail-page {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+/* 顶部导航 */
+.city-detail-page-nav {
+  padding: 16px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.city-detail-page-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  color: #3b82f6;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.city-detail-page-back:hover {
+  background-color: #eff6ff;
+}
+
+/* 内容区域 */
+.city-detail-page-content {
+  flex: 1;
+}
+
+/* 加载状态 */
+.city-detail-page-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+}
+
+/* 空状态 / 错误状态 */
+.city-detail-page-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.city-detail-page-empty-icon {
+  width: 64px;
+  height: 64px;
+  color: #d1d5db;
+  margin-bottom: 16px;
+}
+
+.city-detail-page-empty-title {
+  margin: 0 0 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.city-detail-page-empty-text {
+  margin: 0 0 24px;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.city-detail-page-back-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.city-detail-page-back-link:hover {
+  background: #2563eb;
+}
+
+/* 响应式 */
+@media (max-width: 767px) {
+  .city-detail-page-nav {
+    padding: 12px 16px;
+  }
+}
+
+/* 暗色模式 */
+@media (prefers-color-scheme: dark) {
+  .city-detail-page-nav {
+    background: #111827;
+    border-color: #374151;
+  }
+
+  .city-detail-page-back {
+    color: #60a5fa;
+  }
+
+  .city-detail-page-back:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+}

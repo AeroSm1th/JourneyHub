@@ -1,0 +1,83 @@
+/**
+ * 确认对话框样式
+ * 验证需求: 3.10 - 删除前要求用户确认
+ */
+
+.confirm-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* 警告图标 */
+.confirm-dialog-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  margin: 0 auto 0.5rem;
+}
+
+.confirm-dialog-icon--danger {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.confirm-dialog-icon--warning {
+  background-color: #fffbeb;
+  color: #d97706;
+}
+
+.confirm-dialog-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* 消息文本 */
+.confirm-dialog-message {
+  font-size: 0.9375rem;
+  color: #374151;
+  margin: 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.confirm-dialog-message strong {
+  font-weight: 600;
+  color: #111827;
+}
+
+/* 警告提示 */
+.confirm-dialog-warning {
+  font-size: 0.8125rem;
+  color: #dc2626;
+  margin: 0;
+  text-align: center;
+}
+
+/* 操作按钮 */
+.confirm-dialog-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.confirm-dialog-actions button {
+  flex: 1;
+}
+
+/* 移动端适配 */
+@media (max-width: 767px) {
+  .confirm-dialog-actions {
+    flex-direction: column;
+  }
+}
+
+/* 触摸屏优化 (需求 10.4) */
+@media (hover: none) and (pointer: coarse) {
+  .confirm-dialog-actions button {
+    min-height: 2.75rem;
+  }
+}

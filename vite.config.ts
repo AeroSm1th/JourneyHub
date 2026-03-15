@@ -22,6 +22,7 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./src/tests/setup.ts",
+    css: true, // 启用 CSS 处理
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],

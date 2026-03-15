@@ -1,0 +1,347 @@
+/**
+ * 城市列表页面样式
+ */
+
+.cities-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 页面头部 */
+.cities-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.cities-page-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.cities-page-count {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+/* 视图切换 */
+.cities-view-toggle {
+  display: flex;
+  gap: 4px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.cities-view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cities-view-btn:hover {
+  color: #374151;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.cities-view-btn-active {
+  background: white;
+  color: #3b82f6;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 搜索和筛选栏 */
+.cities-toolbar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.cities-search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.cities-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.cities-search-input {
+  width: 100%;
+  padding: 10px 12px 10px 40px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #1f2937;
+  background: white;
+  outline: none;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.cities-search-input::placeholder {
+  color: #9ca3af;
+}
+
+.cities-search-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* 筛选下拉框 */
+.cities-filter-select {
+  padding: 10px 32px 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #1f2937;
+  background: white;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: border-color 0.2s ease;
+}
+
+.cities-filter-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* 网格视图 */
+.cities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* 列表视图 */
+.cities-list-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cities-list-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.cities-list-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.cities-list-item:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.cities-list-item-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.cities-list-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cities-list-item-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.cities-list-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cities-list-item-name {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.cities-list-item-country {
+  margin: 0 0 4px;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.cities-list-item-date {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.cities-list-item-rating {
+  flex-shrink: 0;
+  font-size: 0.875rem;
+  color: #fbbf24;
+}
+
+/* 空状态 */
+.cities-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.cities-empty-icon {
+  width: 64px;
+  height: 64px;
+  color: #d1d5db;
+  margin-bottom: 16px;
+}
+
+.cities-empty-title {
+  margin: 0 0 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.cities-empty-text {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+/* 加载和错误状态 */
+.cities-loading,
+.cities-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.cities-error-message {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ef4444;
+}
+
+.cities-error-detail {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .cities-page {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .cities-page-title {
+    font-size: 1.5rem;
+  }
+
+  .cities-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cities-search-wrapper {
+    min-width: unset;
+  }
+
+  .cities-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .cities-list-item-image {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+/* 暗色模式 */
+@media (prefers-color-scheme: dark) {
+  .cities-page-title {
+    color: #f9fafb;
+  }
+
+  .cities-search-input {
+    background: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+
+  .cities-filter-select {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+
+  .cities-view-toggle {
+    background: #374151;
+  }
+
+  .cities-view-btn-active {
+    background: #1f2937;
+  }
+
+  .cities-list-item {
+    background: #1f2937;
+  }
+
+  .cities-list-item-name {
+    color: #f9fafb;
+  }
+}

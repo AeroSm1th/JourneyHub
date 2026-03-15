@@ -1,0 +1,244 @@
+/**
+ * 城市卡片组件样式
+ */
+
+.city-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  outline: none;
+}
+
+.city-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.city-card:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.city-card-selected {
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  border: 2px solid #3b82f6;
+}
+
+/* 封面图区域 */
+.city-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.city-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.city-card:hover .city-card-image {
+  transform: scale(1.05);
+}
+
+.city-card-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.city-card-image-icon {
+  width: 64px;
+  height: 64px;
+}
+
+/* 收藏标记 */
+.city-card-favorite-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.city-card-favorite-icon {
+  width: 18px;
+  height: 18px;
+  color: #fbbf24;
+}
+
+/* 卡片内容 */
+.city-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+/* 标题区域 */
+.city-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.city-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.4;
+}
+
+.city-card-country {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* 访问日期 */
+.city-card-date {
+  display: block;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+/* 评分 */
+.city-card-rating {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.city-card-star {
+  width: 18px;
+  height: 18px;
+  color: #d1d5db;
+  transition: color 0.2s ease;
+}
+
+.city-card-star-filled {
+  color: #fbbf24;
+}
+
+/* 标签 */
+.city-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.city-card-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #3b82f6;
+  background: #eff6ff;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.city-card-tag-more {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  background: #f3f4f6;
+  border-radius: 12px;
+  cursor: help;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .city-card-image-wrapper {
+    height: 160px;
+  }
+
+  .city-card-content {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .city-card-title {
+    font-size: 1.125rem;
+  }
+
+  .city-card-favorite-badge {
+    width: 28px;
+    height: 28px;
+    top: 10px;
+    right: 10px;
+  }
+
+  .city-card-favorite-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .city-card {
+    /* 增加触摸目标大小 */
+    min-height: 48px;
+  }
+
+  .city-card:active {
+    transform: scale(0.98);
+  }
+}
+
+/* 暗色模式支持（可选） */
+@media (prefers-color-scheme: dark) {
+  .city-card {
+    background: #1f2937;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .city-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .city-card-title {
+    color: #f9fafb;
+  }
+
+  .city-card-country {
+    color: #d1d5db;
+  }
+
+  .city-card-date {
+    color: #9ca3af;
+  }
+
+  .city-card-tag {
+    color: #60a5fa;
+    background: #1e3a8a;
+  }
+
+  .city-card-tag-more {
+    color: #d1d5db;
+    background: #374151;
+  }
+}
