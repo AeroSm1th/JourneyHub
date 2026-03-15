@@ -35,13 +35,13 @@
   - 配置自定义颜色主题
   - _需求: 10.7_
 
-- [-] 1.4 配置 ESLint 和代码规范
+- [x] 1.4 配置 ESLint 和代码规范
   - 配置 ESLint 规则
   - 配置 Prettier
   - 添加 pre-commit hooks
   - _需求: 13.7_
 
-- [ ] 1.5 创建目录结构
+- [x] 1.5 创建目录结构
   - 按照设计文档创建完整的目录结构
   - 创建 features、components、pages、services 等目录
   - _需求: 无（架构）_
@@ -49,25 +49,25 @@
 
 ### 2. Supabase 后端配置
 
-- [ ] 2.1 创建 Supabase 项目并配置数据库
+- [x] 2.1 创建 Supabase 项目并配置数据库
   - 在 Supabase 控制台创建新项目
   - 创建 users、cities、wishlist_items、trips、trip_days、trip_tasks、shares 表
   - 配置表结构、字段类型、约束
   - _需求: 无（基础设施）_
 
-- [ ] 2.2 配置 Row Level Security (RLS) 策略
+- [x] 2.2 配置 Row Level Security (RLS) 策略
   - 为所有表启用 RLS
   - 创建用户数据隔离策略（用户只能访问自己的数据）
   - 创建分享数据的公开访问策略
   - _需求: 12.1_
 
-- [ ] 2.3 配置 Supabase Storage
+- [x] 2.3 配置 Supabase Storage
   - 创建 city-images bucket
   - 配置文件大小限制（5MB）
   - 配置允许的文件类型（JPG、PNG、WebP）
   - _需求: 3.3_
 
-- [ ] 2.4 创建 Supabase 客户端配置
+- [x] 2.4 创建 Supabase 客户端配置
   - 在 `src/services/supabase/client.ts` 创建客户端实例
   - 配置认证持久化和自动刷新
   - 配置全局请求头
@@ -80,23 +80,23 @@
 
 ### 3. 类型定义与数据模型
 
-- [ ] 3.1 定义数据库类型
+- [x] 3.1 定义数据库类型
   - 在 `src/types/database.ts` 定义 Supabase 数据库类型
   - 使用 Supabase CLI 生成类型定义
   - _需求: 无（类型安全）_
 
-- [ ] 3.2 定义业务实体类型
+- [x] 3.2 定义业务实体类型
   - 在 `src/types/entities.ts` 定义 User、City、WishlistItem、Trip 等类型
   - 确保类型与数据库表结构一致
   - _需求: 无（类型安全）_
 
-- [ ] 3.3 创建 Zod 验证 Schema
+- [x] 3.3 创建 Zod 验证 Schema
   - 在 `src/schemas/citySchema.ts` 定义城市表单验证规则
   - 在 `src/schemas/authSchema.ts` 定义认证表单验证规则
   - 在 `src/schemas/tripSchema.ts` 定义行程表单验证规则
   - _需求: 9.1_
 
-- [ ]* 3.4 编写单元测试：表单验证
+- [x] 3.4 编写单元测试：表单验证
   - 测试所有 Zod schema 的验证规则
   - 测试边界条件和错误消息
   - _需求: 9.1, 9.2_
@@ -104,24 +104,24 @@
 
 ### 4. 认证功能实现
 
-- [ ] 4.1 创建认证 API 封装
+- [x] 4.1 创建认证 API 封装
   - 在 `src/features/auth/api.ts` 封装 Supabase 认证方法
   - 实现 signUp、signIn、signOut、getCurrentUser 函数
   - _需求: 1.1, 1.2, 1.6_
 
-- [ ] 4.2 创建认证状态管理
+- [x] 4.2 创建认证状态管理
   - 在 `src/store/authStore.ts` 使用 Zustand 管理认证状态
   - 存储 user 和 session 信息
   - 实现 setAuth 和 clearAuth 方法
   - _需求: 1.4_
 
-- [ ] 4.3 创建认证 Hooks
+- [x] 4.3 创建认证 Hooks
   - 在 `src/features/auth/hooks/useAuth.ts` 创建认证状态 hook
   - 在 `src/features/auth/hooks/useLogin.ts` 创建登录 mutation hook
   - 在 `src/features/auth/hooks/useRegister.ts` 创建注册 mutation hook
   - _需求: 1.1, 1.2_
 
-- [ ] 4.4 实现登录页面
+- [x] 4.4 实现登录页面
   - 在 `src/pages/auth/LoginPage.tsx` 创建登录页面
   - 使用 React Hook Form + Zod 验证
   - 实现邮箱密码登录表单

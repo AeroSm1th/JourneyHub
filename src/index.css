@@ -1,9 +1,9 @@
 /* 外部资源导入必须在最前面 */
-@import "https://unpkg.com/leaflet@1.9.3/dist/leaflet.css";
-@import "https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap";
+@import 'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css';
+@import 'https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap';
 
 /* Tailwind CSS v4 配置 */
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* 自定义主题配置 */
 @theme {
@@ -11,19 +11,19 @@
   --breakpoint-mobile: 0px;
   --breakpoint-tablet: 768px;
   --breakpoint-desktop: 1024px;
-  
+
   /* 自定义颜色主题 - 适合旅行应用的配色方案 */
   --color-brand-primary: #ffb545;
   --color-brand-secondary: #00c46a;
-  
+
   --color-dark-0: #242a2e;
   --color-dark-1: #2d3439;
   --color-dark-2: #42484d;
-  
+
   --color-light-1: #aaa;
   --color-light-2: #ececec;
   --color-light-3: #d6dee0;
-  
+
   /* 字体家族 */
   --font-family-sans: 'Manrope', sans-serif;
 }
@@ -53,7 +53,7 @@ html {
 }
 
 body {
-  font-family: "Manrope", sans-serif;
+  font-family: 'Manrope', sans-serif;
   color: var(--color-light--2);
   font-weight: 400;
   line-height: 1.6;

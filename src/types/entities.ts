@@ -12,15 +12,7 @@
 // 基础实体类型（从 database.ts 导入）
 // ============================================================================
 
-export type {
-  User,
-  City,
-  WishlistItem,
-  Trip,
-  TripDay,
-  TripTask,
-  Share,
-} from './database';
+export type { User, City, WishlistItem, Trip, TripDay, TripTask, Share } from './database';
 
 // ============================================================================
 // 枚举类型
@@ -300,23 +292,23 @@ export interface TravelStatistics {
   totalCountries: number;
   totalContinents: number;
   continentCoverage: number; // 百分比 (0-100)
-  
+
   // 大洲分布
   citiesByContinent: Record<string, number>;
-  
+
   // 年度统计
   citiesByYear: Record<string, number>;
-  
+
   // 热门城市
   topCities: Array<{
     cityName: string;
     countryName: string;
     visitCount: number;
   }>;
-  
+
   // 旅行类型分布
   tripTypeDistribution: Record<TripType, number>;
-  
+
   // 评分统计
   averageRating?: number;
   ratingDistribution: Record<number, number>; // 1-5 星的数量
@@ -369,13 +361,13 @@ export interface ChartData {
     name: string; // 国家名称
     value: number; // 访问次数
   }>;
-  
+
   // 年度柱状图数据
   yearlyChartData: {
     years: string[];
     values: number[];
   };
-  
+
   // 大洲饼图数据
   continentPieData: Array<{
     name: string;
