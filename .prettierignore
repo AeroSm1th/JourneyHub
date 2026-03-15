@@ -1,0 +1,24 @@
+# 依赖
+node_modules
+dist
+build
+
+# 配置文件
+.env
+.env.local
+.env.production
+
+# 日志
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 编辑器
+.vscode
+.idea
+
+# 其他
+coverage
+.DS_Store
+*.tsbuildinfo
