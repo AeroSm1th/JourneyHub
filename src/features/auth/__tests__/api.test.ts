@@ -67,12 +67,6 @@ describe('认证 API', () => {
       const mockUser = {
         id: 'user-123',
         email: 'test@example.com',
-      };
-
-      const mockUserData = {
-        id: 'user-123',
-        email: 'test@example.com',
-        nickname: 'Test User',
         created_at: '2024-01-01T00:00:00Z',
       };
 
@@ -84,20 +78,14 @@ describe('认证 API', () => {
         error: null,
       } as any);
 
-      const mockFrom = {
-        select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({
-          data: mockUserData,
-          error: null,
-        }),
-      };
-
-      vi.mocked(supabase.from).mockReturnValue(mockFrom as any);
-
       const result = await signIn('test@example.com', 'password123');
 
-      expect(result).toEqual(mockUserData);
+      // signIn 直接使用 supabase.auth 返回的用户信息，不查询 users 表
+      expect(result).toEqual({
+        id: 'user-123',
+        email: 'test@example.com',
+        created_at: '2024-01-01T00:00:00Z',
+      });
       expect(supabase.auth.signInWithPassword).toHaveBeenCalledWith({
         email: 'test@example.com',
         password: 'password123',
@@ -139,14 +127,8 @@ describe('认证 API', () => {
         user: {
           id: 'user-123',
           email: 'test@example.com',
+          created_at: '2024-01-01T00:00:00Z',
         },
-      };
-
-      const mockUserData = {
-        id: 'user-123',
-        email: 'test@example.com',
-        nickname: 'Test User',
-        created_at: '2024-01-01T00:00:00Z',
       };
 
       vi.mocked(supabase.auth.getSession).mockResolvedValue({
@@ -154,20 +136,14 @@ describe('认证 API', () => {
         error: null,
       } as any);
 
-      const mockFrom = {
-        select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({
-          data: mockUserData,
-          error: null,
-        }),
-      };
-
-      vi.mocked(supabase.from).mockReturnValue(mockFrom as any);
-
       const result = await getCurrentUser();
 
-      expect(result).toEqual(mockUserData);
+      // getCurrentUser 直接使用 session.user 的信息，不查询 users 表
+      expect(result).toEqual({
+        id: 'user-123',
+        email: 'test@example.com',
+        created_at: '2024-01-01T00:00:00Z',
+      });
     });
 
     it('应该在未登录时返回 null', async () => {
@@ -181,29 +157,13 @@ describe('认证 API', () => {
       expect(result).toBeNull();
     });
 
-    it('应该在用户记录不存在时返回 null', async () => {
-      const mockSession = {
-        user: {
-          id: 'user-123',
-          email: 'test@example.com',
-        },
-      };
-
+    it('应该在没有会话时返回 null', async () => {
+      // getCurrentUser 不查询 users 表，只依赖 session
+      // 当 session 为 null 时返回 null
       vi.mocked(supabase.auth.getSession).mockResolvedValue({
-        data: { session: mockSession as any },
+        data: { session: null },
         error: null,
       } as any);
-
-      const mockFrom = {
-        select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({
-          data: null,
-          error: { code: 'PGRST116', message: 'Not found' } as any,
-        }),
-      };
-
-      vi.mocked(supabase.from).mockReturnValue(mockFrom as any);
 
       const result = await getCurrentUser();
 

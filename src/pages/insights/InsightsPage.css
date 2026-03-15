@@ -1,0 +1,150 @@
+/**
+ * 统计仪表板页面样式
+ */
+
+.insights-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 页面头部 */
+.insights-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.insights-page-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* 图表区块通用样式 */
+.insights-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+}
+
+.insights-section-title {
+  margin: 0 0 16px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* 双列网格：年度柱状图 + 大洲饼图 */
+.insights-charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* 加载状态 */
+.insights-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+/* 错误状态 */
+.insights-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.insights-error-message {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ef4444;
+}
+
+.insights-error-detail {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* 空状态 */
+.insights-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.insights-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.insights-empty-title {
+  margin: 0 0 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.insights-empty-text {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+/* 响应式：平板及以下 */
+@media (max-width: 768px) {
+  .insights-page {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .insights-page-title {
+    font-size: 1.5rem;
+  }
+
+  .insights-charts-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .insights-section {
+    padding: 16px;
+  }
+}
+
+/* 暗色模式 */
+@media (prefers-color-scheme: dark) {
+  .insights-page-title {
+    color: #f9fafb;
+  }
+
+  .insights-section {
+    background: #1f2937;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .insights-section-title {
+    color: #e5e7eb;
+  }
+}

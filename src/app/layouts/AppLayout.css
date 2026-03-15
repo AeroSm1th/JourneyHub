@@ -67,7 +67,7 @@
 
 .main-content {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
   background-color: var(--color-bg-secondary, #f9fafb);
   transition: margin-left 0.3s ease;
 }

@@ -113,6 +113,51 @@
   background-color: #d1d5db;
 }
 
+/* ========== 视图切换标签 ========== */
+
+.sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  flex-shrink: 0;
+}
+
+.sidebar-tab {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+  min-height: 44px;
+}
+
+.sidebar-tab:hover {
+  color: #374151;
+  background-color: #f3f4f6;
+}
+
+.sidebar-tab--active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.sidebar-tab--active:hover {
+  color: #2563eb;
+  background-color: transparent;
+}
+
+.sidebar-tab:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+}
+
 /* ========== 侧边栏内容 ========== */
 
 .sidebar-content {

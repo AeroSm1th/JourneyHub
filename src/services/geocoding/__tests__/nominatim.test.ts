@@ -287,7 +287,7 @@ describe('reverseGeocode', () => {
     expect(fetchCall).toContain('lat=39.9042');
     expect(fetchCall).toContain('lon=116.4074');
     expect(fetchCall).toContain('accept-language=zh-CN');
-    expect(fetchCall).toContain('zoom=10');
+    expect(fetchCall).toContain('zoom=18');
   });
 
   it('应该设置正确的 User-Agent 头', async () => {

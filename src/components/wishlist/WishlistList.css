@@ -1,0 +1,111 @@
+/**
+ * 愿望清单列表样式
+ *
+ * 响应式设计，支持桌面端、平板端和移动端
+ * 验证需求: 4.4, 10.1, 10.2, 10.3
+ */
+
+/* ========== 容器 ========== */
+
+.wishlist-list-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.wishlist-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #ffffff;
+}
+
+.wishlist-list-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.wishlist-list-count {
+  font-size: 0.875rem;
+  color: #6b7280;
+  background-color: #fef3c7;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+}
+
+/* ========== 列表 ========== */
+
+.wishlist-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.wishlist-list-item {
+  /* 列表项无额外样式，由 WishlistCard 控制 */
+}
+
+/* ========== 状态样式 ========== */
+
+.wishlist-list-loading,
+.wishlist-list-error,
+.wishlist-list-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.wishlist-list-error-message,
+.wishlist-list-empty-message {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+
+.wishlist-list-error-detail {
+  font-size: 0.875rem;
+  color: #ef4444;
+  margin: 0;
+}
+
+.wishlist-list-empty-hint {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ========== 响应式 ========== */
+
+/* 平板端 (768px-1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .wishlist-list-header {
+    padding: 1rem 1.25rem;
+  }
+}
+
+/* 移动端 (<768px) */
+@media (max-width: 767px) {
+  .wishlist-list-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .wishlist-list-title {
+    font-size: 1.125rem;
+  }
+
+  .wishlist-list-count {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+  }
+}

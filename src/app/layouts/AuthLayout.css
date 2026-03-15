@@ -8,7 +8,7 @@
 .auth-layout {
   display: flex;
   min-height: 100vh;
-  background-color: var(--color-bg-secondary, #f9fafb);
+  background-color: var(--color-dark--0, #242a2e);
 }
 
 /* 左侧品牌展示区域 */

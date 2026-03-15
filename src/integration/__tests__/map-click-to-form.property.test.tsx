@@ -27,9 +27,7 @@ const createTestQueryClient = () =>
 // 测试包装器
 const TestWrapper = ({ children }: { children: React.ReactNode }) => {
   const queryClient = createTestQueryClient();
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 };
 
 afterEach(() => {
@@ -44,11 +42,7 @@ function renderCityForm(coordinates: { lat: number; lng: number }) {
   const onCancel = vi.fn();
   return render(
     <TestWrapper>
-      <CityForm
-        coordinates={coordinates}
-        onSubmit={onSubmit}
-        onCancel={onCancel}
-      />
+      <CityForm coordinates={coordinates} onSubmit={onSubmit} onCancel={onCancel} />
     </TestWrapper>
   );
 }
@@ -216,12 +210,8 @@ describe('集成属性测试：地图点击到表单显示', () => {
           expect(screen.getAllByLabelText(/旅行类型/).length).toBeGreaterThanOrEqual(1);
 
           // 验证：操作按钮应该存在
-          expect(
-            screen.getAllByRole('button', { name: /取消/ }).length
-          ).toBeGreaterThanOrEqual(1);
-          expect(
-            screen.getAllByRole('button', { name: /提交/ }).length
-          ).toBeGreaterThanOrEqual(1);
+          expect(screen.getAllByRole('button', { name: /取消/ }).length).toBeGreaterThanOrEqual(1);
+          expect(screen.getAllByRole('button', { name: /提交/ }).length).toBeGreaterThanOrEqual(1);
 
           unmount();
         }

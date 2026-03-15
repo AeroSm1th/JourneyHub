@@ -74,10 +74,20 @@ export const cityFormSchema = z.object({
     .optional(),
 
   coverImage: z
-    .instanceof(File, { message: '封面图片格式不正确' })
-    .refine((file) => file.size <= 5 * 1024 * 1024, '图片大小不能超过 5MB')
+    .any()
     .refine(
-      (file) => ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+      (val) => val === undefined || val === null || val instanceof File,
+      '封面图片格式不正确'
+    )
+    .refine(
+      (val) => !val || !(val instanceof File) || val.size <= 5 * 1024 * 1024,
+      '图片大小不能超过 5MB'
+    )
+    .refine(
+      (val) =>
+        !val ||
+        !(val instanceof File) ||
+        ['image/jpeg', 'image/png', 'image/webp'].includes(val.type),
       '只支持 JPG、PNG、WebP 格式的图片'
     )
     .optional(),
@@ -152,11 +162,14 @@ export const wishlistFormSchema = z.object({
     .optional()
     .default(3),
 
-  expectedSeason: z
-    .enum(['spring', 'summer', 'autumn', 'winter'] as const, {
-      errorMap: () => ({ message: '请选择有效的季节' }),
-    })
-    .optional(),
+  expectedSeason: z.preprocess(
+    (val) => (val === '' ? undefined : val),
+    z
+      .enum(['spring', 'summer', 'autumn', 'winter'] as const, {
+        errorMap: () => ({ message: '请选择有效的季节' }),
+      })
+      .optional(),
+  ),
 
   notes: z.string().max(2000, '备注不能超过 2000 个字符').trim().optional(),
 });

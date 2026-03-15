@@ -1,55 +1,70 @@
 /**
  * 用户信息组件
  *
- * 显示当前登录用户信息和退出登录按钮
+ * 可折叠的用户菜单，点击头像/图标展开，显示邮箱和退出按钮
  * 验证需求: 1.6, 1.7 - 退出登录功能
  */
 
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useState, useRef, useEffect } from 'react';
+import { useAuthStore } from '@/store/authStore';
 import { signOut } from '@/features/auth/api';
-import styles from './User.module.css';
+import './User.css';
 
-/**
- * 用户信息组件
- *
- * 功能：
- * - 显示用户邮箱
- * - 提供退出登录按钮
- * - 退出后清除会话令牌和本地缓存
- * - 重定向到登录页面
- *
- * @example
- * ```tsx
- * <User />
- * ```
- */
 function User() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  const { user, clearAuth } = useAuthStore();
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // 点击外部关闭菜单
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  if (!user) return null;
+
+  // 取邮箱首字母作为头像
+  const initial = (user.email ?? 'U')[0].toUpperCase();
 
   const handleLogout = async () => {
     try {
-      // 调用退出登录 API
+      clearAuth();
       await signOut();
-
-      // 重定向到登录页面
-      navigate('/auth/login', { replace: true });
     } catch (error) {
       console.error('退出登录失败:', error);
-      // 即使出错也尝试重定向
-      navigate('/auth/login', { replace: true });
     }
+    // signOut 后 onAuthStateChange 会触发 clearAuth
+    // ProtectedRoute 检测到 user=null 会自动重定向到登录页
   };
 
-  if (!user) {
-    return null;
-  }
-
   return (
-    <div className={styles.user}>
-      <span>欢迎, {user.email}</span>
-      <button onClick={handleLogout}>退出登录</button>
+    <div className="user-menu" ref={menuRef}>
+      <button
+        className="user-avatar-btn"
+        onClick={() => setOpen(!open)}
+        aria-label="用户菜单"
+        aria-expanded={open}
+      >
+        <span className="user-avatar">{initial}</span>
+      </button>
+
+      {open && (
+        <div className="user-dropdown">
+          <div className="user-dropdown-info">
+            <span className="user-dropdown-avatar">{initial}</span>
+            <span className="user-dropdown-email">{user.email}</span>
+          </div>
+          <hr className="user-dropdown-divider" />
+          <button className="user-dropdown-logout" onClick={handleLogout}>
+            退出登录
+          </button>
+        </div>
+      )}
     </div>
   );
 }

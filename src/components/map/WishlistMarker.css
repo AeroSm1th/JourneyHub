@@ -1,0 +1,128 @@
+/**
+ * 愿望清单标记样式
+ */
+
+/* 自定义标记图标容器 */
+.wishlist-marker-icon {
+  background: transparent;
+  border: none;
+}
+
+/* 愿望清单标记主体 */
+.wishlist-marker {
+  width: 32px;
+  height: 32px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  border: 2px dashed rgba(255, 255, 255, 0.6);
+}
+
+/* 标记内的 SVG 图标 */
+.wishlist-marker svg {
+  transform: rotate(45deg);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+/* 悬停效果 */
+.wishlist-marker:hover {
+  transform: rotate(-45deg) scale(1.1);
+}
+
+/* 弹窗容器 */
+.wishlist-popup {
+  min-width: 200px;
+}
+
+/* 弹窗内容 */
+.wishlist-popup-content {
+  padding: 4px;
+}
+
+/* 弹窗标题 */
+.wishlist-popup-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* 弹窗信息区域 */
+.wishlist-popup-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 弹窗信息项 */
+.wishlist-popup-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+/* 信息标签 */
+.wishlist-popup-label {
+  font-weight: 500;
+  color: #6b7280;
+  margin-right: 4px;
+}
+
+/* 优先级标记 */
+.wishlist-popup-priority {
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: #fff7ed;
+  color: #ea580c;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* 季节标记 */
+.wishlist-popup-season {
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  /* 增大触摸区域 */
+  .wishlist-marker {
+    width: 40px;
+    height: 40px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .wishlist-marker svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* 弹窗在移动端的调整 */
+  .wishlist-popup {
+    min-width: 180px;
+  }
+
+  .wishlist-popup-title {
+    font-size: 16px;
+  }
+
+  .wishlist-popup-info p {
+    font-size: 13px;
+  }
+}

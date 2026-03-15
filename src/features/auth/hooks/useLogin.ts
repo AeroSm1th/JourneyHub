@@ -90,15 +90,19 @@ export function useLogin(options?: UseLoginOptions) {
      * 登录成功处理
      */
     onSuccess: (user) => {
-      // 注意：认证状态会通过 useAuth 中的 onAuthStateChange 自动更新
-      // 这里不需要手动调用 setAuth
+      // 立即更新 store，确保 navigate 前 ProtectedRoute 能读到 user
+      // onAuthStateChange 之后也会触发，但那是异步的，不能依赖它
+      setAuth(
+        { id: user.id, email: user.email, created_at: user.created_at } as any,
+        null,
+      );
 
       // 执行用户自定义的成功回调
       options?.onSuccess?.();
 
       // 重定向到指定页面
       const redirectPath = options?.redirectTo || '/app';
-      navigate(redirectPath);
+      navigate(redirectPath, { replace: true });
     },
 
     /**

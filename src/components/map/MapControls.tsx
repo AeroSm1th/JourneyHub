@@ -41,22 +41,27 @@ interface MapControlsProps {
  */
 export function MapControls({ defaultZoom = 6, defaultCenter = [39.9, 116.4] }: MapControlsProps) {
   const map = useMap();
-  const { isLoading, position, error, getPosition } = useGeolocation();
+  const { isLoading, coordinates, error, getCurrentPosition } = useGeolocation();
   const [locationError, setLocationError] = useState<string | null>(null);
   const [hasMovedToPosition, setHasMovedToPosition] = useState(false);
 
-  // 放大地图
+  // 放大地图 — 先停止当前动画，锁定中心点再缩放
   const handleZoomIn = () => {
-    map.zoomIn();
+    map.stop();
+    const center = map.getCenter();
+    map.setView(center, map.getZoom() + 1);
   };
 
-  // 缩小地图
+  // 缩小地图 — 同上
   const handleZoomOut = () => {
-    map.zoomOut();
+    map.stop();
+    const center = map.getCenter();
+    map.setView(center, map.getZoom() - 1);
   };
 
   // 重置视图
   const handleReset = () => {
+    map.stop();
     map.setView(defaultCenter, defaultZoom);
   };
 
@@ -64,21 +69,21 @@ export function MapControls({ defaultZoom = 6, defaultCenter = [39.9, 116.4] }: 
   const handleLocate = () => {
     setLocationError(null);
     setHasMovedToPosition(false);
-    getPosition();
+    getCurrentPosition();
   };
 
   // 当获取到位置后，移动地图
   useEffect(() => {
-    if (position && !isLoading && !hasMovedToPosition) {
-      map.setView([position.lat, position.lng], 13);
+    if (coordinates && !isLoading && !hasMovedToPosition) {
+      map.setView([coordinates.latitude, coordinates.longitude], 13);
       setHasMovedToPosition(true);
     }
-  }, [position, isLoading, hasMovedToPosition, map]);
+  }, [coordinates, isLoading, hasMovedToPosition, map]);
 
   // 处理定位错误
   useEffect(() => {
     if (error && !locationError) {
-      setLocationError(error);
+      setLocationError(error.message);
     }
   }, [error, locationError]);
 

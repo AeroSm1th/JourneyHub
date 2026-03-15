@@ -1,0 +1,460 @@
+/**
+ * 行程详情页面样式
+ */
+
+.trip-detail-page {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+/* 顶部导航 */
+.trip-detail-page-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.trip-detail-page-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  color: #3b82f6;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.trip-detail-page-back:hover {
+  background-color: #eff6ff;
+}
+
+.trip-detail-page-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* 内容区域 */
+.trip-detail-page-content {
+  flex: 1;
+  padding: 24px;
+}
+
+/* 加载状态 */
+.trip-detail-page-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+}
+
+/* 空状态 / 错误状态 */
+.trip-detail-page-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.trip-detail-page-empty-icon {
+  width: 64px;
+  height: 64px;
+  color: #d1d5db;
+  margin-bottom: 16px;
+}
+
+.trip-detail-page-empty-title {
+  margin: 0 0 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.trip-detail-page-empty-text {
+  margin: 0 0 24px;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.trip-detail-page-back-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.trip-detail-page-back-link:hover {
+  background: #2563eb;
+}
+
+
+/* 标题和状态 */
+.trip-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.trip-detail-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.trip-detail-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.trip-detail-status-planning {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.trip-detail-status-ongoing {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.trip-detail-status-completed {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+/* 日期范围 */
+.trip-detail-dates {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-size: 0.9375rem;
+  color: #4b5563;
+}
+
+.trip-detail-date-separator {
+  color: #9ca3af;
+}
+
+/* 信息网格 */
+.trip-detail-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.trip-detail-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trip-detail-info-label {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.trip-detail-info-value {
+  font-size: 0.9375rem;
+  color: #111827;
+  font-weight: 600;
+}
+
+.trip-detail-city-link {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.trip-detail-city-link:hover {
+  color: #2563eb;
+}
+
+/* 区块 */
+.trip-detail-section {
+  margin-bottom: 24px;
+}
+
+.trip-detail-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.trip-detail-task-count {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin-left: 4px;
+}
+
+/* 备注 */
+.trip-detail-notes {
+  margin: 0;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  font-size: 0.9375rem;
+  color: #374151;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* 日程列表 */
+.trip-detail-days {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trip-detail-day-item {
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #3b82f6;
+}
+
+.trip-detail-day-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.trip-detail-day-index {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #3b82f6;
+}
+
+.trip-detail-day-date {
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+.trip-detail-day-title {
+  margin: 4px 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.trip-detail-day-notes {
+  margin: 4px 0 0;
+  font-size: 0.875rem;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+/* 待办事项列表 */
+.trip-detail-tasks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trip-detail-task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.trip-detail-task-checkbox {
+  font-size: 1rem;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.trip-detail-task-content {
+  font-size: 0.9375rem;
+  color: #111827;
+  line-height: 1.4;
+}
+
+.trip-detail-task-done .trip-detail-task-content {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+/* 响应式 */
+@media (max-width: 767px) {
+  .trip-detail-page-nav {
+    padding: 12px 16px;
+  }
+
+  .trip-detail-page-content {
+    padding: 16px;
+  }
+
+  .trip-detail-title {
+    font-size: 1.25rem;
+  }
+
+  .trip-detail-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trip-detail-dates {
+    flex-wrap: wrap;
+  }
+}
+
+/* 暗色模式 */
+@media (prefers-color-scheme: dark) {
+  .trip-detail-page-nav {
+    background: #111827;
+    border-color: #374151;
+  }
+
+  .trip-detail-page-back {
+    color: #60a5fa;
+  }
+
+  .trip-detail-page-back:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+
+  .trip-detail-title {
+    color: #f9fafb;
+  }
+
+  .trip-detail-dates {
+    color: #d1d5db;
+  }
+
+  .trip-detail-info-grid {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
+  .trip-detail-info-label {
+    color: #9ca3af;
+  }
+
+  .trip-detail-info-value {
+    color: #f9fafb;
+  }
+
+  .trip-detail-city-link {
+    color: #60a5fa;
+  }
+
+  .trip-detail-section-title {
+    color: #f9fafb;
+  }
+
+  .trip-detail-notes {
+    background: #1f2937;
+    border-color: #374151;
+    color: #d1d5db;
+  }
+
+  .trip-detail-day-item {
+    background: #1f2937;
+    border-color: #374151;
+    border-left-color: #3b82f6;
+  }
+
+  .trip-detail-day-title {
+    color: #f9fafb;
+  }
+
+  .trip-detail-day-notes {
+    color: #d1d5db;
+  }
+
+  .trip-detail-task-item {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
+  .trip-detail-task-content {
+    color: #f9fafb;
+  }
+
+  .trip-detail-task-done .trip-detail-task-content {
+    color: #6b7280;
+  }
+
+  .trip-detail-page-empty-title {
+    color: #9ca3af;
+  }
+
+  .trip-detail-page-empty-text {
+    color: #6b7280;
+  }
+
+  .trip-detail-status-planning {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+  }
+
+  .trip-detail-status-ongoing {
+    background-color: rgba(34, 197, 94, 0.2);
+    color: #86efac;
+  }
+
+  .trip-detail-status-completed {
+    background-color: rgba(107, 114, 128, 0.2);
+    color: #9ca3af;
+  }
+}

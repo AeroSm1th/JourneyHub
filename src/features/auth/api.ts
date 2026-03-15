@@ -96,18 +96,14 @@ export async function signIn(email: string, password: string): Promise<User> {
     throw new Error('登录失败：未返回用户信息');
   }
 
-  // 从 users 表获取完整用户信息
-  const { data: userData, error: userError } = await supabase
-    .from('users')
-    .select('*')
-    .eq('id', data.user.id)
-    .single();
+  // 直接使用 Supabase auth 返回的用户信息
+  const user: User = {
+    id: data.user.id,
+    email: data.user.email!,
+    created_at: data.user.created_at,
+  };
 
-  if (userError) {
-    throw new Error(`获取用户信息失败：${userError.message}`);
-  }
-
-  return userData;
+  return user;
 }
 
 /**
@@ -156,20 +152,10 @@ export async function getCurrentUser(): Promise<User | null> {
     return null;
   }
 
-  // 从 users 表获取完整用户信息
-  const { data: userData, error: userError } = await supabase
-    .from('users')
-    .select('*')
-    .eq('id', session.user.id)
-    .single();
-
-  if (userError) {
-    // 如果用户记录不存在，返回 null
-    if (userError.code === 'PGRST116') {
-      return null;
-    }
-    throw new Error(`获取用户信息失败：${userError.message}`);
-  }
-
-  return userData;
+  // 直接使用 Supabase auth 的用户信息
+  return {
+    id: session.user.id,
+    email: session.user.email!,
+    created_at: session.user.created_at,
+  };
 }

@@ -1,0 +1,49 @@
+/**
+ * 行程列表页面样式
+ */
+
+.trips-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 页面头部 */
+.trips-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.trips-page-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .trips-page {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .trips-page-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* 暗色模式 */
+@media (prefers-color-scheme: dark) {
+  .trips-page-title {
+    color: #f9fafb;
+  }
+}

@@ -15,6 +15,11 @@ import Homepage from '@/pages/Homepage';
 import { MapPage } from '@/pages/map/MapPage';
 import CitiesPage from '@/pages/cities/CitiesPage';
 import CityDetailPage from '@/pages/cities/CityDetailPage';
+import TripDetailPage from '@/pages/trips/TripDetailPage';
+import TripPlannerPage from '@/pages/trips/TripPlannerPage';
+import TripsPage from '@/pages/trips/TripsPage';
+import InsightsPage from '@/pages/insights/InsightsPage';
+import ProfilePage from '@/pages/profile/ProfilePage';
 
 /**
  * 应用路由配置
@@ -85,23 +90,27 @@ export const router = createBrowserRouter([
       },
       {
         path: 'trips',
-        element: <div>行程列表页面（待实现）</div>,
+        element: <TripsPage />,
       },
       {
         path: 'trips/:tripId',
-        element: <div>行程详情页面（待实现）</div>,
+        element: <TripDetailPage />,
       },
       {
         path: 'trips/new',
-        element: <div>创建行程页面（待实现）</div>,
+        element: <TripPlannerPage />,
+      },
+      {
+        path: 'trips/:tripId/edit',
+        element: <TripPlannerPage />,
       },
       {
         path: 'insights',
-        element: <div>统计仪表板（待实现）</div>,
+        element: <InsightsPage />,
       },
       {
         path: 'profile',
-        element: <div>个人资料页面（待实现）</div>,
+        element: <ProfilePage />,
       },
     ],
   },

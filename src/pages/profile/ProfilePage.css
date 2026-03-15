@@ -1,0 +1,264 @@
+/**
+ * 个人资料页面样式
+ */
+
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 页面头部 */
+.profile-page-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-page-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* 加载 / 错误状态 */
+.profile-loading,
+.profile-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.profile-error-message {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ef4444;
+}
+
+.profile-error-detail {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* 资料卡片 */
+.profile-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 32px;
+}
+
+/* 头像区域 */
+.profile-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e5e7eb;
+}
+
+.profile-avatar-placeholder {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #9ca3af;
+}
+
+.profile-avatar-upload {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.profile-avatar-upload input[type='file'] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* 信息区域 */
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-field-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.profile-field-value {
+  font-size: 1rem;
+  color: #1f2937;
+}
+
+/* 昵称编辑行 */
+.profile-nickname-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.profile-nickname-row .input-wrapper {
+  flex: 1;
+}
+
+/* 操作区域 */
+.profile-actions {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-actions-title {
+  margin: 0 0 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.profile-actions-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* 危险区域 */
+.profile-danger-zone {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  border: 1px solid #fecaca;
+}
+
+.profile-danger-title {
+  margin: 0 0 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #dc2626;
+}
+
+.profile-danger-desc {
+  margin: 0 0 16px;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* 成功提示 */
+.profile-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #059669;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: profile-toast-in 0.3s ease;
+}
+
+@keyframes profile-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .profile-page {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .profile-page-title {
+    font-size: 1.5rem;
+  }
+
+  .profile-card,
+  .profile-actions,
+  .profile-danger-zone {
+    padding: 20px;
+  }
+
+  .profile-actions-row {
+    flex-direction: column;
+  }
+}
+
+/* 暗色模式 */
+@media (prefers-color-scheme: dark) {
+  .profile-page-title {
+    color: #f9fafb;
+  }
+
+  .profile-card,
+  .profile-actions,
+  .profile-danger-zone {
+    background: #1f2937;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .profile-field-value {
+    color: #f3f4f6;
+  }
+
+  .profile-field-label {
+    color: #9ca3af;
+  }
+
+  .profile-actions-title {
+    color: #e5e7eb;
+  }
+
+  .profile-danger-zone {
+    border-color: #7f1d1d;
+  }
+}

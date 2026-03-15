@@ -1,0 +1,181 @@
+/**
+ * 行程日程编辑组件样式
+ */
+
+.trip-day-editor {
+  width: 100%;
+}
+
+.trip-day-editor__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.trip-day-editor__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.trip-day-editor__count {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.trip-day-editor__error {
+  padding: 1rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.5rem;
+  color: #dc2626;
+  font-size: 0.875rem;
+}
+
+.trip-day-editor__empty {
+  text-align: center;
+  color: #6b7280;
+  padding: 2rem 1rem;
+  font-size: 0.875rem;
+}
+
+.trip-day-editor__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.trip-day-editor__item {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: border-color 0.2s;
+}
+
+.trip-day-editor__item:hover {
+  border-color: #d1d5db;
+}
+
+.trip-day-editor__item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.trip-day-editor__day-index {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #3b82f6;
+  background: #eff6ff;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.trip-day-editor__date {
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+.trip-day-editor__field {
+  margin-bottom: 0.5rem;
+}
+
+.trip-day-editor__field:last-child {
+  margin-bottom: 0;
+}
+
+.trip-day-editor__editable {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.375rem 0.5rem;
+  border: 1px dashed transparent;
+  border-radius: 0.25rem;
+  background: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #1f2937;
+  transition: all 0.15s;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.trip-day-editor__editable:hover {
+  border-color: #d1d5db;
+  background: white;
+}
+
+.trip-day-editor__editable--notes {
+  font-size: 0.8125rem;
+  color: #4b5563;
+  white-space: pre-wrap;
+}
+
+.trip-day-editor__placeholder {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.trip-day-editor__edit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.trip-day-editor__input {
+  width: 100%;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid #3b82f6;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  font-family: inherit;
+}
+
+.trip-day-editor__input:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.trip-day-editor__textarea {
+  width: 100%;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid #3b82f6;
+  border-radius: 0.25rem;
+  font-size: 0.8125rem;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  resize: vertical;
+  min-height: 60px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.trip-day-editor__textarea:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.trip-day-editor__edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+@media (max-width: 640px) {
+  .trip-day-editor__item {
+    padding: 0.75rem;
+  }
+
+  .trip-day-editor__edit-actions {
+    flex-direction: row;
+  }
+}

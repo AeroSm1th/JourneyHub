@@ -1,0 +1,213 @@
+/**
+ * 行程规划页面样式
+ */
+
+.trip-planner-page {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+/* 顶部导航 */
+.trip-planner-page__nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.trip-planner-page__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  color: #3b82f6;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.trip-planner-page__back:hover {
+  background-color: #eff6ff;
+}
+
+.trip-planner-page__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Tab 导航 */
+.trip-planner-page__tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.trip-planner-page__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.trip-planner-page__tab:hover {
+  color: #3b82f6;
+}
+
+.trip-planner-page__tab--active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.trip-planner-page__tab-icon {
+  font-size: 1rem;
+}
+
+.trip-planner-page__tab-label {
+  font-size: 0.875rem;
+}
+
+/* 内容区域 */
+.trip-planner-page__content {
+  flex: 1;
+  padding: 24px;
+}
+
+/* 加载状态 */
+.trip-planner-page__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+}
+
+/* 空状态 / 错误状态 */
+.trip-planner-page__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.trip-planner-page__empty-title {
+  margin: 0 0 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.trip-planner-page__empty-text {
+  margin: 0 0 24px;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+
+/* 响应式 */
+@media (max-width: 767px) {
+  .trip-planner-page__nav {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+  }
+
+  .trip-planner-page__title {
+    font-size: 1rem;
+    order: 2;
+    flex-basis: 100%;
+    margin-top: 4px;
+  }
+
+  .trip-planner-page__tabs {
+    padding: 0 16px;
+  }
+
+  .trip-planner-page__tab {
+    padding: 10px 12px;
+  }
+
+  .trip-planner-page__content {
+    padding: 16px;
+  }
+}
+
+/* 暗色模式 */
+@media (prefers-color-scheme: dark) {
+  .trip-planner-page__nav {
+    background: #111827;
+    border-color: #374151;
+  }
+
+  .trip-planner-page__back {
+    color: #60a5fa;
+  }
+
+  .trip-planner-page__back:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+
+  .trip-planner-page__title {
+    color: #f9fafb;
+  }
+
+  .trip-planner-page__tabs {
+    background: #111827;
+    border-color: #374151;
+  }
+
+  .trip-planner-page__tab {
+    color: #9ca3af;
+  }
+
+  .trip-planner-page__tab:hover {
+    color: #60a5fa;
+  }
+
+  .trip-planner-page__tab--active {
+    color: #60a5fa;
+    border-bottom-color: #60a5fa;
+  }
+
+  .trip-planner-page__empty-title {
+    color: #9ca3af;
+  }
+
+  .trip-planner-page__empty-text {
+    color: #6b7280;
+  }
+}

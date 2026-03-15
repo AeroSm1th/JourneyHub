@@ -87,10 +87,17 @@ export function useMapState(): UseMapStateReturn {
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // 从 URL 参数读取地图状态
+  // 使用 parseFloat + isNaN 避免 0 值被 || 运算符误判为 falsy
   const mapState: MapState = {
-    lat: Number(searchParams.get('lat')) || DEFAULT_MAP_STATE.lat,
-    lng: Number(searchParams.get('lng')) || DEFAULT_MAP_STATE.lng,
-    zoom: Number(searchParams.get('zoom')) || DEFAULT_MAP_STATE.zoom,
+    lat: searchParams.has('lat') && !isNaN(Number(searchParams.get('lat')))
+      ? Number(searchParams.get('lat'))
+      : DEFAULT_MAP_STATE.lat,
+    lng: searchParams.has('lng') && !isNaN(Number(searchParams.get('lng')))
+      ? Number(searchParams.get('lng'))
+      : DEFAULT_MAP_STATE.lng,
+    zoom: searchParams.has('zoom') && !isNaN(Number(searchParams.get('zoom')))
+      ? Number(searchParams.get('zoom'))
+      : DEFAULT_MAP_STATE.zoom,
   };
 
   /**

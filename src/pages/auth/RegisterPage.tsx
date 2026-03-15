@@ -1,14 +1,7 @@
 /**
  * 注册页面
  *
- * 功能：
- * - 使用 React Hook Form + Zod 进行表单验证
- * - 实现邮箱密码注册
- * - 验证邮箱格式和密码强度（至少 8 个字符）
- * - 验证密码确认匹配
- * - 显示验证错误消息
- * - 注册成功后重定向到登录页
- *
+ * 在 AuthLayout 内渲染，只包含表单部分
  * 验证需求: 1.1, 1.3
  */
 
@@ -19,9 +12,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { registerSchema, type RegisterInput } from '@/schemas/authSchema';
 import { useRegister } from '@/features/auth/hooks/useRegister';
 import { useAuth } from '@/features/auth/hooks/useAuth';
-import Button from '@/components/Button';
-import PageNav from '@/components/PageNav';
-import styles from '../Login.module.css';
+import './RegisterPage.css';
 
 /**
  * 注册页面组件
@@ -30,7 +21,6 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
-  // 使用 React Hook Form + Zod 验证
   const {
     register,
     handleSubmit,
@@ -44,35 +34,27 @@ export default function RegisterPage() {
     },
   });
 
-  // 注册 mutation
   const { mutate: signUp, isPending, error: registerError } = useRegister();
 
-  // 如果已登录，重定向到应用主页
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/app', { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
-  /**
-   * 表单提交处理
-   */
   const onSubmit = (data: RegisterInput) => {
     signUp(data);
   };
 
-  // 是否正在处理（表单提交或注册中）
   const isLoading = isSubmitting || isPending;
 
   return (
-    <main className={styles.login}>
-      <PageNav />
+    <div className="register-page">
+      <h2 className="register-title">注册 JourneyHub 账户</h2>
 
-      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-        <h2>注册 JourneyHub 账户</h2>
-
-        {/* 邮箱输入 */}
-        <div className={styles.row}>
+      <form className="register-form" onSubmit={handleSubmit(onSubmit)}>
+        {/* 邮箱 */}
+        <div className="form-group">
           <label htmlFor="email">邮箱地址</label>
           <input
             type="email"
@@ -84,14 +66,14 @@ export default function RegisterPage() {
             aria-describedby={errors.email ? 'email-error' : undefined}
           />
           {errors.email && (
-            <span id="email-error" className={styles.error} role="alert">
+            <span id="email-error" className="form-error" role="alert">
               {errors.email.message}
             </span>
           )}
         </div>
 
-        {/* 密码输入 */}
-        <div className={styles.row}>
+        {/* 密码 */}
+        <div className="form-group">
           <label htmlFor="password">密码</label>
           <input
             type="password"
@@ -103,14 +85,14 @@ export default function RegisterPage() {
             aria-describedby={errors.password ? 'password-error' : undefined}
           />
           {errors.password && (
-            <span id="password-error" className={styles.error} role="alert">
+            <span id="password-error" className="form-error" role="alert">
               {errors.password.message}
             </span>
           )}
         </div>
 
-        {/* 确认密码输入 */}
-        <div className={styles.row}>
+        {/* 确认密码 */}
+        <div className="form-group">
           <label htmlFor="confirmPassword">确认密码</label>
           <input
             type="password"
@@ -122,36 +104,32 @@ export default function RegisterPage() {
             aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
           />
           {errors.confirmPassword && (
-            <span id="confirmPassword-error" className={styles.error} role="alert">
+            <span id="confirmPassword-error" className="form-error" role="alert">
               {errors.confirmPassword.message}
             </span>
           )}
         </div>
 
-        {/* 注册错误提示 */}
+        {/* 注册错误 */}
         {registerError && (
-          <div className={styles.errorBox} role="alert">
+          <div className="form-error-box" role="alert">
             <p>注册失败：{registerError.message}</p>
           </div>
         )}
 
-        {/* 提交按钮 */}
-        <div>
-          <Button type="primary" disabled={isLoading}>
-            {isLoading ? '注册中...' : '注册'}
-          </Button>
-        </div>
+        {/* 提交 */}
+        <button type="submit" className="register-btn" disabled={isLoading}>
+          {isLoading ? '注册中...' : '注册'}
+        </button>
 
         {/* 登录链接 */}
-        <div className={styles.footer}>
-          <p>
-            已有账户？{' '}
-            <Link to="/auth/login" className={styles.link}>
-              立即登录
-            </Link>
-          </p>
-        </div>
+        <p className="register-footer">
+          已有账户？{' '}
+          <Link to="/auth/login" className="register-link">
+            立即登录
+          </Link>
+        </p>
       </form>
-    </main>
+    </div>
   );
 }

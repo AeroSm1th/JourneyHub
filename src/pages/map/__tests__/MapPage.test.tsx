@@ -9,8 +9,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MapPage } from '../MapPage';
 import * as citiesHooks from '@/features/cities/hooks/useCities';
+import * as wishlistHooks from '@/features/wishlist/hooks/useWishlist';
 import * as mapStateHooks from '@/hooks/useMapState';
-import { City } from '@/types/database';
+import { City, WishlistItem } from '@/types/database';
 
 // Mock Leaflet 组件
 vi.mock('react-leaflet', () => ({
@@ -56,16 +57,22 @@ vi.mock('@/hooks/useGeolocation', () => ({
   }),
 }));
 
-// Mock UI Store
+// Mock UI Store - 使用可配置的 mock
+const mockSetMapView = vi.fn();
+const mockToggleSidebar = vi.fn();
+const mockSelectCity = vi.fn();
+
+let mockMapView = 'cities';
+
 vi.mock('@/store/uiStore', () => ({
   useUIStore: () => ({
     sidebarOpen: true,
     selectedCityId: null,
-    mapView: 'cities',
+    mapView: mockMapView,
     isOffline: false,
-    toggleSidebar: vi.fn(),
-    setMapView: vi.fn(),
-    selectCity: vi.fn(),
+    toggleSidebar: mockToggleSidebar,
+    setMapView: mockSetMapView,
+    selectCity: mockSelectCity,
     setOfflineStatus: vi.fn(),
   }),
 }));
@@ -139,6 +146,36 @@ const mockCities: City[] = [
   },
 ];
 
+// 创建测试用的愿望清单数据
+const mockWishlistItems: WishlistItem[] = [
+  {
+    id: 'w1',
+    user_id: 'user-1',
+    city_name: '东京',
+    country_name: '日本',
+    continent: 'Asia',
+    latitude: 35.6762,
+    longitude: 139.6503,
+    priority: 5,
+    expected_season: 'spring',
+    notes: '想去看樱花',
+    created_at: '2024-03-01T00:00:00Z',
+  },
+  {
+    id: 'w2',
+    user_id: 'user-1',
+    city_name: '巴黎',
+    country_name: '法国',
+    continent: 'Europe',
+    latitude: 48.8566,
+    longitude: 2.3522,
+    priority: 4,
+    expected_season: 'summer',
+    notes: '浪漫之都',
+    created_at: '2024-03-02T00:00:00Z',
+  },
+];
+
 // 测试辅助函数
 function renderMapPage() {
   const queryClient = new QueryClient({
@@ -159,9 +196,19 @@ function renderMapPage() {
 
 describe('MapPage', () => {
   beforeEach(() => {
+    // 重置 mapView 为默认值
+    mockMapView = 'cities';
+
     // Mock useCities hook
     vi.spyOn(citiesHooks, 'useCities').mockReturnValue({
       data: mockCities,
+      isLoading: false,
+      error: null,
+    } as any);
+
+    // Mock useWishlist hook
+    vi.spyOn(wishlistHooks, 'useWishlist').mockReturnValue({
+      data: mockWishlistItems,
       isLoading: false,
       error: null,
     } as any);
@@ -255,5 +302,66 @@ describe('MapPage', () => {
     renderMapPage();
     // CityList 组件会显示空状态
     expect(screen.getByText('还没有城市记录')).toBeInTheDocument();
+  });
+
+  // ========== 视图切换与愿望清单标记测试 ==========
+
+  it('cities 视图下应该只渲染城市标记', () => {
+    mockMapView = 'cities';
+    renderMapPage();
+    const markers = screen.getAllByTestId('marker');
+    // 只有城市标记（2 个城市）
+    expect(markers).toHaveLength(mockCities.length);
+  });
+
+  it('wishlist 视图下应该只渲染愿望清单标记', () => {
+    mockMapView = 'wishlist';
+    renderMapPage();
+    const markers = screen.getAllByTestId('marker');
+    // 只有愿望清单标记（2 个愿望清单项目）
+    expect(markers).toHaveLength(mockWishlistItems.length);
+  });
+
+  it('trips 视图下应该同时渲染城市和愿望清单标记', () => {
+    mockMapView = 'trips';
+    renderMapPage();
+    const markers = screen.getAllByTestId('marker');
+    // 城市标记 + 愿望清单标记
+    expect(markers).toHaveLength(mockCities.length + mockWishlistItems.length);
+  });
+
+  it('列表模式下应该显示视图切换标签', () => {
+    renderMapPage();
+    // 应该有城市和愿望清单两个标签
+    expect(screen.getByRole('tab', { name: '城市' })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: '愿望清单' })).toBeInTheDocument();
+  });
+
+  it('cities 视图下城市标签应该处于激活状态', () => {
+    mockMapView = 'cities';
+    renderMapPage();
+    const cityTab = screen.getByRole('tab', { name: '城市' });
+    expect(cityTab).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('wishlist 视图下应该显示愿望清单标题', () => {
+    mockMapView = 'wishlist';
+    renderMapPage();
+    expect(screen.getByRole('heading', { level: 1, name: '愿望清单' })).toBeInTheDocument();
+  });
+
+  it('wishlist 视图下愿望清单标签应该处于激活状态', () => {
+    mockMapView = 'wishlist';
+    renderMapPage();
+    const wishlistTab = screen.getByRole('tab', { name: '愿望清单' });
+    expect(wishlistTab).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('点击愿望清单标签应该调用 setMapView', async () => {
+    const user = userEvent.setup();
+    renderMapPage();
+    const wishlistTab = screen.getByRole('tab', { name: '愿望清单' });
+    await user.click(wishlistTab);
+    expect(mockSetMapView).toHaveBeenCalledWith('wishlist');
   });
 });

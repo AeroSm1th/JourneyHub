@@ -47,6 +47,9 @@ export const CityForm: React.FC<CityFormProps> = ({
   } = useForm({
     resolver: zodResolver(cityFormSchema),
     defaultValues: {
+      cityName: '',
+      countryName: '',
+      continent: '' as Continent,
       latitude: coordinates.lat,
       longitude: coordinates.lng,
       visitedAt: new Date(),
@@ -58,9 +61,9 @@ export const CityForm: React.FC<CityFormProps> = ({
   // 当反向地理编码数据可用时，自动填充表单
   useEffect(() => {
     if (geocodingData && !initialData) {
-      setValue('cityName', geocodingData.cityName);
-      setValue('countryName', geocodingData.countryName);
-      setValue('continent', geocodingData.continent as Continent);
+      setValue('cityName', geocodingData.cityName, { shouldDirty: true });
+      setValue('countryName', geocodingData.countryName, { shouldDirty: true });
+      setValue('continent', geocodingData.continent as Continent, { shouldDirty: true });
     }
   }, [geocodingData, initialData, setValue]);
 
@@ -246,16 +249,18 @@ export const CityForm: React.FC<CityFormProps> = ({
           id="coverImage"
           type="file"
           accept="image/jpeg,image/png,image/webp"
-          {...register('coverImage', {
-            setValueAs: (value) => (value && value[0] ? value[0] : undefined),
-          })}
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            // 选了文件就设置 File，没选或清除就设置 undefined
+            setValue('coverImage', file ?? undefined, { shouldValidate: true });
+          }}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           disabled={isLoading}
         />
         {errors.coverImage && (
-          <p className="mt-1 text-sm text-red-600">{errors.coverImage.message}</p>
+          <p className="mt-1 text-sm text-red-600">{errors.coverImage.message as string}</p>
         )}
-        {coverImage && (
+        {coverImage && coverImage instanceof File && (
           <p className="mt-1 text-sm text-gray-600">
             已选择: {coverImage.name} ({(coverImage.size / 1024 / 1024).toFixed(2)} MB)
           </p>

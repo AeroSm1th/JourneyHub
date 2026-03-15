@@ -155,9 +155,7 @@ describe('属性测试：地图容器点击事件', () => {
    * 属性 9.15: 默认缩放级别应该有效
    */
   it('属性 9.15: 不提供缩放级别时应该使用默认值', () => {
-    const { unmount } = render(
-      <MapContainer center={[39.9, 116.4]} onMapClick={vi.fn()} />
-    );
+    const { unmount } = render(<MapContainer center={[39.9, 116.4]} onMapClick={vi.fn()} />);
     expect(screen.getByTestId('leaflet-map')).toBeInTheDocument();
     unmount();
   });
