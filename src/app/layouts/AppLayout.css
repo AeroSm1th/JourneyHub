@@ -1,0 +1,121 @@
+/**
+ * 应用主布局样式
+ *
+ * 响应式布局：
+ * - 桌面端（≥1024px）：固定侧边栏
+ * - 平板端（768px-1023px）：可折叠侧边栏
+ * - 移动端（<768px）：覆盖层侧边栏
+ */
+
+/* 主布局容器 */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* 顶部导航栏 */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: var(--color-bg-primary, #ffffff);
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  z-index: 10;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sidebar-toggle {
+  display: none;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-primary, #1f2937);
+  transition: color 0.2s;
+}
+
+.sidebar-toggle:hover {
+  color: var(--color-primary, #3b82f6);
+}
+
+.app-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+/* 主内容区域 */
+.app-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  overflow: auto;
+  background-color: var(--color-bg-secondary, #f9fafb);
+  transition: margin-left 0.3s ease;
+}
+
+/* 侧边栏遮罩层（仅移动端） */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+/* 平板端样式（768px - 1023px） */
+@media (max-width: 1023px) {
+  .sidebar-toggle {
+    display: block;
+  }
+
+  .app-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* 移动端样式（<768px） */
+@media (max-width: 767px) {
+  .app-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .app-title {
+    font-size: 1.125rem;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+  }
+}
+
+/* 桌面端样式（≥1024px） */
+@media (min-width: 1024px) {
+  .sidebar-toggle {
+    display: none;
+  }
+
+  .main-content.sidebar-open {
+    margin-left: 0;
+  }
+}

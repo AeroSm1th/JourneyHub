@@ -1,156 +1,113 @@
 /**
  * 应用路由配置
  *
- * 使用 React Router v6 配置应用的路由结构
- * 包含公开路由、认证路由和受保护路由
+ * 配置 React Router，设置嵌套路由结构
+ * 验证需求: 1.5 - 路由守卫和受保护路由
  */
 
-import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import SpinnerFullPage from '@/components/SpinnerFullPage';
-
-// 懒加载页面组件
-const Homepage = lazy(() => import('@/pages/Homepage'));
-const Product = lazy(() => import('@/pages/Product'));
-const Pricing = lazy(() => import('@/pages/Pricing'));
-const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
-const AppLayout = lazy(() => import('@/pages/AppLayout'));
-const PageNotFound = lazy(() => import('@/pages/PageNotFound'));
-const ProtectedRoute = lazy(() => import('@/pages/ProtectedRoute'));
-
-// 城市相关组件
-const CityList = lazy(() => import('@/components/CityList'));
-const CountryList = lazy(() => import('@/components/CountryList'));
-const City = lazy(() => import('@/components/City'));
-const Form = lazy(() => import('@/components/Form'));
-
-/**
- * Suspense 包装组件
- * 为懒加载组件提供加载状态
- */
-const SuspenseWrapper = ({ children }: { children: React.ReactNode }) => (
-  <Suspense fallback={<SpinnerFullPage />}>{children}</Suspense>
-);
+import { ProtectedRoute } from '@/pages/ProtectedRoute';
+import { AppLayout } from '@/app/layouts/AppLayout';
+import { AuthLayout } from '@/app/layouts/AuthLayout';
+import LoginPage from '@/pages/auth/LoginPage';
+import RegisterPage from '@/pages/auth/RegisterPage';
+import Homepage from '@/pages/Homepage';
 
 /**
  * 应用路由配置
+ *
+ * 路由结构：
+ * - / - 首页
+ * - /auth - 认证布局
+ *   - /auth/login - 登录页面
+ *   - /auth/register - 注册页面
+ * - /app - 应用主布局（受保护）
+ *   - /app/map - 地图页面（待实现）
+ *   - /app/cities - 城市列表页面（待实现）
+ *   - /app/wishlist - 愿望清单页面（待实现）
+ *   - /app/trips - 行程列表页面（待实现）
+ *   - /app/insights - 统计仪表板（待实现）
+ *   - /app/profile - 个人资料页面（待实现）
  */
 export const router = createBrowserRouter([
-  // 首页
   {
     path: '/',
-    element: (
-      <SuspenseWrapper>
-        <Homepage />
-      </SuspenseWrapper>
-    ),
+    element: <Homepage />,
   },
-
-  // 产品和定价页面
-  {
-    path: '/product',
-    element: (
-      <SuspenseWrapper>
-        <Product />
-      </SuspenseWrapper>
-    ),
-  },
-  {
-    path: '/pricing',
-    element: (
-      <SuspenseWrapper>
-        <Pricing />
-      </SuspenseWrapper>
-    ),
-  },
-
-  // 认证路由
   {
     path: '/auth',
+    element: <AuthLayout />,
     children: [
       {
-        path: 'login',
-        element: (
-          <SuspenseWrapper>
-            <LoginPage />
-          </SuspenseWrapper>
-        ),
+        index: true,
+        element: <Navigate to="/auth/login" replace />,
       },
-      // 注册页面（待实现）
-      // {
-      //   path: 'register',
-      //   element: (
-      //     <SuspenseWrapper>
-      //       <RegisterPage />
-      //     </SuspenseWrapper>
-      //   ),
-      // },
+      {
+        path: 'login',
+        element: <LoginPage />,
+      },
+      {
+        path: 'register',
+        element: <RegisterPage />,
+      },
     ],
   },
-
-  // 兼容旧路由
-  {
-    path: '/login',
-    element: <Navigate to="/auth/login" replace />,
-  },
-
-  // 应用主路由（受保护）
   {
     path: '/app',
     element: (
-      <SuspenseWrapper>
-        <ProtectedRoute>
-          <AppLayout />
-        </ProtectedRoute>
-      </SuspenseWrapper>
+      <ProtectedRoute>
+        <AppLayout />
+      </ProtectedRoute>
     ),
     children: [
       {
         index: true,
-        element: <Navigate to="cities" replace />,
+        element: <Navigate to="/app/map" replace />,
+      },
+      {
+        path: 'map',
+        element: <div>地图页面（待实现）</div>,
       },
       {
         path: 'cities',
-        element: (
-          <SuspenseWrapper>
-            <CityList />
-          </SuspenseWrapper>
-        ),
+        element: <div>城市列表页面（待实现）</div>,
       },
       {
-        path: 'cities/:id',
-        element: (
-          <SuspenseWrapper>
-            <City />
-          </SuspenseWrapper>
-        ),
+        path: 'cities/:cityId',
+        element: <div>城市详情页面（待实现）</div>,
       },
       {
-        path: 'countries',
-        element: (
-          <SuspenseWrapper>
-            <CountryList />
-          </SuspenseWrapper>
-        ),
+        path: 'wishlist',
+        element: <div>愿望清单页面（待实现）</div>,
       },
       {
-        path: 'form',
-        element: (
-          <SuspenseWrapper>
-            <Form />
-          </SuspenseWrapper>
-        ),
+        path: 'trips',
+        element: <div>行程列表页面（待实现）</div>,
+      },
+      {
+        path: 'trips/:tripId',
+        element: <div>行程详情页面（待实现）</div>,
+      },
+      {
+        path: 'trips/new',
+        element: <div>创建行程页面（待实现）</div>,
+      },
+      {
+        path: 'insights',
+        element: <div>统计仪表板（待实现）</div>,
+      },
+      {
+        path: 'profile',
+        element: <div>个人资料页面（待实现）</div>,
       },
     ],
   },
-
-  // 404 页面
+  {
+    path: '/share/:slug',
+    element: <div>公开分享页面（待实现）</div>,
+  },
   {
     path: '*',
-    element: (
-      <SuspenseWrapper>
-        <PageNotFound />
-      </SuspenseWrapper>
-    ),
+    element: <div>404 - 页面未找到</div>,
   },
 ]);

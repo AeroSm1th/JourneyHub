@@ -9,18 +9,21 @@
 ## 功能特性
 
 ✅ **表单验证**
+
 - 邮箱格式验证
 - 密码长度验证（至少 8 个字符）
 - 密码确认匹配验证
 - 实时错误提示
 
 ✅ **用户体验**
+
 - 加载状态显示
 - 错误消息提示
 - 注册成功后自动重定向到登录页
 - 无障碍访问支持
 
 ✅ **安全性**
+
 - 密码输入隐藏
 - 表单提交时禁用按钮
 - 密码确认验证
@@ -43,11 +46,11 @@ const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
 
 ### 2. 表单验证规则
 
-| 字段 | 规则 | 错误消息 |
-|------|------|---------|
-| 邮箱 | 必填、有效邮箱格式 | "邮箱不能为空" / "请输入有效的邮箱地址" |
-| 密码 | 必填、至少 8 个字符 | "密码不能为空" / "密码至少需要 8 个字符" |
-| 确认密码 | 必填、与密码匹配 | "请确认密码" / "两次输入的密码不一致" |
+| 字段     | 规则                | 错误消息                                 |
+| -------- | ------------------- | ---------------------------------------- |
+| 邮箱     | 必填、有效邮箱格式  | "邮箱不能为空" / "请输入有效的邮箱地址"  |
+| 密码     | 必填、至少 8 个字符 | "密码不能为空" / "密码至少需要 8 个字符" |
+| 确认密码 | 必填、与密码匹配    | "请确认密码" / "两次输入的密码不一致"    |
 
 ### 3. 注册流程
 
@@ -77,8 +80,12 @@ const { isAuthenticated } = useAuth();
 const { mutate: signUp, isPending, error } = useRegister();
 
 // 表单管理
-const { register, handleSubmit, formState: { errors } } = useForm({
-  resolver: zodResolver(registerSchema)
+const {
+  register,
+  handleSubmit,
+  formState: { errors },
+} = useForm({
+  resolver: zodResolver(registerSchema),
 });
 ```
 
@@ -171,7 +178,7 @@ const { mutate: signUp, error } = useRegister({
     } else {
       toast.error('注册失败，请稍后重试');
     }
-  }
+  },
 });
 ```
 
@@ -182,20 +189,11 @@ A: 在表单中添加复选框：
 ```tsx
 <div className={styles.row}>
   <label>
-    <input
-      type="checkbox"
-      {...register('agreeToTerms')}
-    />
+    <input type="checkbox" {...register('agreeToTerms')} />
     我已阅读并同意
-    <Link to="/terms">用户协议</Link>
-    和
-    <Link to="/privacy">隐私政策</Link>
+    <Link to="/terms">用户协议</Link>和<Link to="/privacy">隐私政策</Link>
   </label>
-  {errors.agreeToTerms && (
-    <span className={styles.error}>
-      {errors.agreeToTerms.message}
-    </span>
-  )}
+  {errors.agreeToTerms && <span className={styles.error}>{errors.agreeToTerms.message}</span>}
 </div>
 ```
 
@@ -230,6 +228,7 @@ npm run test:run -- src/pages/auth/__tests__/
 ```
 
 测试覆盖：
+
 - ✅ 表单渲染
 - ✅ 表单验证（邮箱、密码、确认密码）
 - ✅ 注册提交流程

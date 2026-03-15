@@ -1,0 +1,159 @@
+/**
+ * 城市标记样式
+ */
+
+/* 自定义标记图标容器 */
+.city-marker-icon {
+  background: transparent;
+  border: none;
+}
+
+/* 城市标记主体 */
+.city-marker {
+  width: 32px;
+  height: 32px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+/* 标记内的 SVG 图标 */
+.city-marker svg {
+  transform: rotate(45deg);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+/* 悬停效果 */
+.city-marker:hover {
+  transform: rotate(-45deg) scale(1.1);
+}
+
+/* 弹窗容器 */
+.city-popup {
+  min-width: 200px;
+}
+
+/* 弹窗内容 */
+.city-popup-content {
+  padding: 4px;
+}
+
+/* 弹窗标题 */
+.city-popup-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* 弹窗信息区域 */
+.city-popup-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 弹窗信息项 */
+.city-popup-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+/* 信息标签 */
+.city-popup-label {
+  font-weight: 500;
+  color: #6b7280;
+  margin-right: 4px;
+}
+
+/* 评分显示 */
+.city-popup-rating {
+  display: flex;
+  align-items: center;
+}
+
+/* 收藏标记 */
+.city-popup-favorite {
+  margin-top: 4px;
+}
+
+.city-popup-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: #fef2f2;
+  color: #ef4444;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  /* 增大触摸区域 */
+  .city-marker {
+    width: 40px;
+    height: 40px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .city-marker svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* 弹窗在移动端的调整 */
+  .city-popup {
+    min-width: 180px;
+  }
+
+  .city-popup-title {
+    font-size: 16px;
+  }
+
+  .city-popup-info p {
+    font-size: 13px;
+  }
+}
+
+/* 确保弹窗在地图上层 */
+.leaflet-popup {
+  z-index: 1000;
+}
+
+/* 弹窗箭头样式 */
+.leaflet-popup-tip {
+  background-color: white;
+}
+
+/* 弹窗关闭按钮 */
+.leaflet-popup-close-button {
+  color: #6b7280;
+  font-size: 20px;
+  padding: 4px 8px;
+  transition: color 0.2s ease;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #1f2937;
+}
+
+/* 弹窗内容容器 */
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.leaflet-popup-content {
+  margin: 12px 16px;
+  line-height: 1.4;
+}

@@ -5,7 +5,14 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), eslint()],
+  plugins: [
+    react({
+      // 在测试环境中禁用 React Refresh
+      jsxRuntime: "automatic",
+      fastRefresh: process.env.VITEST ? false : true,
+    }),
+    eslint(),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

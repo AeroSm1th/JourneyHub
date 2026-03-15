@@ -1,0 +1,103 @@
+/* 地图控制组件样式 */
+
+.map-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.map-control-btn {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  background-color: white;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.map-control-btn:hover:not(:disabled) {
+  background-color: #f0f0f0;
+  border-color: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.map-control-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.map-control-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.map-control-btn svg {
+  color: #333;
+}
+
+/* 加载动画 */
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 错误提示 */
+.map-control-error {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #fee;
+  border: 1px solid #fcc;
+  border-radius: 6px;
+  color: #c33;
+  font-size: 12px;
+  max-width: 200px;
+  word-wrap: break-word;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .map-controls {
+    top: 10px;
+    right: 10px;
+    gap: 6px;
+  }
+
+  .map-control-btn {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+  }
+
+  .map-control-error {
+    font-size: 11px;
+    max-width: 150px;
+  }
+}
+
+/* 平板端适配 */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .map-controls {
+    top: 15px;
+    right: 15px;
+  }
+}

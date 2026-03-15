@@ -1,0 +1,102 @@
+/**
+ * 认证页面布局样式
+ *
+ * 简洁的居中布局，适配桌面端和移动端
+ */
+
+/* 主布局容器 */
+.auth-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-bg-secondary, #f9fafb);
+}
+
+/* 左侧品牌展示区域 */
+.auth-brand {
+  display: none;
+  flex: 1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 3rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-content {
+  max-width: 500px;
+}
+
+.brand-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.brand-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 3rem;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.brand-features {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.125rem;
+}
+
+.feature-item svg {
+  flex-shrink: 0;
+}
+
+/* 右侧表单区域 */
+.auth-form-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.auth-form-wrapper {
+  width: 100%;
+  max-width: 450px;
+}
+
+/* 桌面端样式（≥1024px） */
+@media (min-width: 1024px) {
+  .auth-brand {
+    display: flex;
+  }
+
+  .auth-form-container {
+    flex: 0 0 50%;
+    max-width: 600px;
+  }
+}
+
+/* 平板端样式（768px - 1023px） */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .auth-form-wrapper {
+    max-width: 500px;
+  }
+}
+
+/* 移动端样式（<768px） */
+@media (max-width: 767px) {
+  .auth-form-container {
+    padding: 1.5rem;
+  }
+
+  .auth-form-wrapper {
+    max-width: 100%;
+  }
+}

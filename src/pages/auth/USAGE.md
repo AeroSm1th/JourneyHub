@@ -10,17 +10,20 @@
 ## 功能特性
 
 ✅ **表单验证**
+
 - 邮箱格式验证
 - 密码长度验证（至少 8 个字符）
 - 实时错误提示
 
 ✅ **用户体验**
+
 - 加载状态显示
 - 错误消息提示
 - 自动重定向（登录成功后）
 - 无障碍访问支持
 
 ✅ **安全性**
+
 - 密码输入隐藏
 - 表单提交时禁用按钮
 - 会话令牌管理
@@ -43,9 +46,9 @@ const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 
 ### 2. 表单验证规则
 
-| 字段 | 规则 | 错误消息 |
-|------|------|---------|
-| 邮箱 | 必填、有效邮箱格式 | "邮箱不能为空" / "请输入有效的邮箱地址" |
+| 字段 | 规则                | 错误消息                                 |
+| ---- | ------------------- | ---------------------------------------- |
+| 邮箱 | 必填、有效邮箱格式  | "邮箱不能为空" / "请输入有效的邮箱地址"  |
 | 密码 | 必填、至少 8 个字符 | "密码不能为空" / "密码至少需要 8 个字符" |
 
 ### 3. 测试账户
@@ -77,8 +80,12 @@ const { isAuthenticated } = useAuth();
 const { mutate: login, isPending, error } = useLogin();
 
 // 表单管理
-const { register, handleSubmit, formState: { errors } } = useForm({
-  resolver: zodResolver(loginSchema)
+const {
+  register,
+  handleSubmit,
+  formState: { errors },
+} = useForm({
+  resolver: zodResolver(loginSchema),
 });
 ```
 
@@ -115,9 +122,7 @@ src/pages/auth/
 // 使用自定义样式
 import customStyles from './CustomLogin.module.css';
 
-<form className={customStyles.form}>
-  {/* ... */}
-</form>
+<form className={customStyles.form}>{/* ... */}</form>;
 ```
 
 ## 常见问题
@@ -146,7 +151,7 @@ const { mutate: login } = useLogin({
       // 保存到 localStorage
       localStorage.setItem('rememberMe', 'true');
     }
-  }
+  },
 });
 ```
 
@@ -156,7 +161,7 @@ A: 使用 `useLogin` hook 的 `redirectTo` 选项：
 
 ```tsx
 const { mutate: login } = useLogin({
-  redirectTo: '/dashboard' // 自定义重定向路径
+  redirectTo: '/dashboard', // 自定义重定向路径
 });
 ```
 
@@ -171,7 +176,7 @@ const { mutate: login, error } = useLogin({
     if (error.message.includes('Invalid')) {
       toast.error('邮箱或密码错误');
     }
-  }
+  },
 });
 ```
 
