@@ -284,7 +284,7 @@
   - 实现 getAll、getById、create、update、delete、search 函数
   - _需求: 3.5, 3.8, 3.9_
 
-- [ ] 8.2 创建城市数据 Hooks
+- [x] 8.2 创建城市数据 Hooks
   - 在 `src/features/cities/hooks/useCities.ts` 创建查询 hook
   - 在 `src/features/cities/hooks/useCity.ts` 创建单个城市查询 hook
   - 在 `src/features/cities/hooks/useCreateCity.ts` 创建创建 mutation hook
