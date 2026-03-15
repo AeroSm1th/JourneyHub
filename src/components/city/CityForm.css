@@ -1,0 +1,172 @@
+/**
+ * 城市表单组件样式
+ */
+
+.city-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.city-form__field {
+  margin-bottom: 1rem;
+}
+
+.city-form__label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.city-form__label--required::after {
+  content: ' *';
+  color: #ef4444;
+}
+
+.city-form__input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.city-form__input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.city-form__input:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.city-form__input--error {
+  border-color: #ef4444;
+}
+
+.city-form__error {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #ef4444;
+}
+
+.city-form__textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  resize: vertical;
+  min-height: 100px;
+  transition: all 0.2s;
+}
+
+.city-form__textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.city-form__select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.city-form__select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.city-form__select:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.city-form__file-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.city-form__file-info {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.city-form__checkbox-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.city-form__checkbox {
+  height: 1rem;
+  width: 1rem;
+  color: #3b82f6;
+  border-color: #d1d5db;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.city-form__checkbox:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.city-form__checkbox-label {
+  margin-left: 0.5rem;
+  font-size: 0.875rem;
+  color: #374151;
+  cursor: pointer;
+}
+
+.city-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  margin-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.city-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .city-form {
+    padding: 1rem;
+  }
+
+  .city-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .city-form__actions {
+    flex-direction: column-reverse;
+  }
+
+  .city-form__actions button {
+    width: 100%;
+  }
+}

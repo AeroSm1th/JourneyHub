@@ -293,7 +293,7 @@
   - 配置 TanStack Query 缓存策略
   - _需求: 3.5, 3.8, 3.9, 11.2_
 
-- [ ] 8.3 实现城市表单组件
+- [x] 8.3 实现城市表单组件
   - 在 `src/components/city/CityForm.tsx` 创建表单组件
   - 使用 React Hook Form + Zod 验证
   - 预填充坐标和反向地理编码结果
