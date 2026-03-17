@@ -96,7 +96,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000,  // 5 分钟
-      gcTime: 10 * 60 * 1000,    // 10 分钟（v5 正确属性名）
+      cacheTime: 10 * 60 * 1000,  // 10 分钟
       retry: (failureCount, error) => {
         // 认证错误和数据库约束错误不重试
         if (isAuthError(error)) return false;
