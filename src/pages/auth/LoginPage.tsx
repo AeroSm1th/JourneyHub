@@ -24,9 +24,10 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
+    mode: 'onTouched',
     defaultValues: {
       email: '',
       password: '',
@@ -99,7 +100,7 @@ export default function LoginPage() {
         )}
 
         {/* 提交 */}
-        <button type="submit" className="login-btn" disabled={isLoading}>
+        <button type="submit" className="login-btn" disabled={isLoading || !isValid}>
           {isLoading ? '登录中...' : '登录'}
         </button>
 

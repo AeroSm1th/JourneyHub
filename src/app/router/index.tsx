@@ -13,6 +13,7 @@ import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
 import Homepage from '@/pages/Homepage';
 import { MapPage } from '@/pages/map/MapPage';
+import WishlistPage from '@/pages/wishlist/WishlistPage';
 import CitiesPage from '@/pages/cities/CitiesPage';
 import CityDetailPage from '@/pages/cities/CityDetailPage';
 import TripDetailPage from '@/pages/trips/TripDetailPage';
@@ -86,7 +87,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'wishlist',
-        element: <div>愿望清单页面（待实现）</div>,
+        element: <WishlistPage />,
       },
       {
         path: 'trips',

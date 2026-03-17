@@ -36,11 +36,7 @@ export const getAll = async (): Promise<WishlistItem[]> => {
  * @throws Error 如果查询失败或记录不存在
  */
 export const getById = async (id: string): Promise<WishlistItem> => {
-  const { data, error } = await supabase
-    .from('wishlist_items')
-    .select('*')
-    .eq('id', id)
-    .single();
+  const { data, error } = await supabase.from('wishlist_items').select('*').eq('id', id).single();
 
   if (error) {
     throw new Error(`获取愿望清单详情失败: ${error.message}`);
@@ -61,11 +57,7 @@ export const getById = async (id: string): Promise<WishlistItem> => {
  * @throws Error 如果创建失败
  */
 export const create = async (itemData: WishlistItemInsert): Promise<WishlistItem> => {
-  const { data, error } = await supabase
-    .from('wishlist_items')
-    .insert(itemData)
-    .select()
-    .single();
+  const { data, error } = await supabase.from('wishlist_items').insert(itemData).select().single();
 
   if (error) {
     throw new Error(`创建愿望清单项目失败: ${error.message}`);

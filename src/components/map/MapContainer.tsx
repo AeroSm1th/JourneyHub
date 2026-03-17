@@ -61,7 +61,15 @@ interface MapContainerProps {
  * 同步外部程序化的 center/zoom 变化到 Leaflet 实例
  * 只响应显式的 flyTo 请求（通过 viewKey 标识），不干预用户手动操作
  */
-function ChangeView({ center, zoom, viewKey }: { center: [number, number]; zoom: number; viewKey?: number }) {
+function ChangeView({
+  center,
+  zoom,
+  viewKey,
+}: {
+  center: [number, number];
+  zoom: number;
+  viewKey?: number;
+}) {
   const map = useMap();
   const prevKeyRef = useRef(viewKey);
 
@@ -86,7 +94,9 @@ function MapEvents({ onMapClick }: { onMapClick?: (lat: number, lng: number) => 
     if (!onMapClick) return;
 
     const handleClick = (e: L.LeafletMouseEvent) => {
-      onMapClick(e.latlng.lat, e.latlng.lng);
+      // Leaflet 在地图水平循环滚动时 lng 可能超出 [-180, 180]，需要 wrap
+      const wrapped = e.latlng.wrap();
+      onMapClick(wrapped.lat, wrapped.lng);
     };
 
     map.on('click', handleClick);
@@ -154,7 +164,13 @@ export function MapContainer({
 }: MapContainerProps) {
   return (
     <div className="map-container">
-      <LeafletMap center={center} zoom={zoom} scrollWheelZoom={true} zoomControl={false} className="leaflet-map">
+      <LeafletMap
+        center={center}
+        zoom={zoom}
+        scrollWheelZoom={true}
+        zoomControl={false}
+        className="leaflet-map"
+      >
         {/* 只在程序化跳转时同步视图 */}
         <ChangeView center={center} zoom={zoom} viewKey={viewKey} />
 

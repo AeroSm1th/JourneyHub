@@ -134,7 +134,9 @@
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
   text-align: center;
 }
 
@@ -232,6 +234,11 @@
 
 .map-sidebar-detail {
   padding: 0;
+}
+
+.map-sidebar-detail .back-button,
+.map-sidebar-form .back-button {
+  margin: 0.75rem 1.25rem 0.5rem;
 }
 
 .map-sidebar-back {

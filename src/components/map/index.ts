@@ -6,3 +6,4 @@ export { MapContainer } from './MapContainer';
 export { CityMarker } from './CityMarker';
 export { WishlistMarker } from './WishlistMarker';
 export { MapControls } from './MapControls';
+export { MapLegend } from './MapLegend';

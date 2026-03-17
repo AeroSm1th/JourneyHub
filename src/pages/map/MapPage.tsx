@@ -7,34 +7,44 @@
  * 验证需求: 2.1, 2.2, 2.6, 3.1, 3.2, 4.3
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { MapContainer } from '@/components/map/MapContainer';
 import { CityMarker } from '@/components/map/CityMarker';
 import { WishlistMarker } from '@/components/map/WishlistMarker';
 import { MapControls } from '@/components/map/MapControls';
+import { MapLegend } from '@/components/map/MapLegend';
 import { CityList } from '@/components/city/CityList';
 import { CityForm } from '@/components/city/CityForm';
 import { CityDetailPanel } from '@/components/city/CityDetailPanel';
 import { WishlistList } from '@/components/wishlist/WishlistList';
+import { WishlistForm } from '@/components/wishlist/WishlistForm';
+import { WishlistDetailPanel } from '@/components/wishlist/WishlistDetailPanel';
+import { Modal } from '@/components/common/Modal';
 import { useCities } from '@/features/cities/hooks/useCities';
 import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
 import { useCreateCity } from '@/features/cities/hooks/useCreateCity';
+import { useUpdateCity } from '@/features/cities/hooks/useUpdateCity';
+import { useCreateWishlistItem } from '@/features/wishlist/hooks/useCreateWishlistItem';
+import { useConvertToCity } from '@/features/wishlist/hooks/useConvertToCity';
 import { useMapState } from '@/hooks/useMapState';
 import { useUIStore, type MapViewMode as StoreMapViewMode } from '@/store/uiStore';
 import { useAuthStore } from '@/store/authStore';
 import { reverseGeocode } from '@/services/geocoding/nominatim';
 import type { City, WishlistItem } from '@/types/database';
-import type { CityFormInput } from '@/schemas/citySchema';
+import type { CityFormInput, WishlistFormInput } from '@/schemas/citySchema';
 import type { GeocodingResult } from '@/types/entities';
-import { Menu, X, Plus } from 'lucide-react';
+import { uploadImage } from '@/utils/storage';
+import { Menu, Plus } from 'lucide-react';
+import { BackButton } from '@/components/common/BackButton';
 import './MapPage.css';
 
 /** 地图页面视图模式 */
-type MapViewMode = 'list' | 'create' | 'detail';
+type MapViewMode = 'list' | 'create' | 'detail' | 'edit';
 
 /** 视图标签配置 */
 const VIEW_TABS: { key: StoreMapViewMode; label: string }[] = [
-  { key: 'cities', label: '城市' },
+  { key: 'cities', label: '我的足迹' },
   { key: 'wishlist', label: '愿望清单' },
 ];
 
@@ -45,9 +55,26 @@ export function MapPage() {
   const { data: cities } = useCities();
   const { data: wishlistData } = useWishlist();
   const { mapState, setMapView, setMapViewImmediate } = useMapState();
-  const { sidebarOpen, selectedCityId, mapView, toggleSidebar, selectCity, setMapView: setStoreMapView } = useUIStore();
+  const {
+    sidebarOpen,
+    selectedCityId,
+    mapView,
+    toggleSidebar,
+    selectCity,
+    setMapView: setStoreMapView,
+  } = useUIStore();
   const { user } = useAuthStore();
   const createCity = useCreateCity();
+  const updateCity = useUpdateCity();
+  const createWishlistItem = useCreateWishlistItem();
+  const {
+    isConverting,
+    prefilledData,
+    startConvert,
+    cancelConvert,
+    submitConvert,
+    isSubmitting: isConvertSubmitting,
+  } = useConvertToCity();
 
   // 类型断言
   const cityList = (cities ?? []) as City[];
@@ -68,10 +95,34 @@ export function MapPage() {
   const [geocodingData, setGeocodingData] = useState<GeocodingResult | null>(null);
   // 地理编码加载状态
   const [isGeocoding, setIsGeocoding] = useState(false);
+  // 当前正在编辑的城市
+  const [editingCity, setEditingCity] = useState<City | null>(null);
+  // 当前选中的愿望清单项目
+  const [selectedWishlistItem, setSelectedWishlistItem] = useState<WishlistItem | null>(null);
+
+  // 处理 URL 中的 edit 参数（从 CityDetailPage 导航过来）
+  const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    const editCityId = searchParams.get('edit');
+    if (editCityId && cityList.length > 0) {
+      const cityToEdit = cityList.find((c) => c.id === editCityId);
+      if (cityToEdit) {
+        setEditingCity(cityToEdit);
+        selectCity(cityToEdit.id);
+        setViewMode('edit');
+        // 清除 URL 中的 edit 参数，避免重复触发
+        setSearchParams((prev) => {
+          const params = new URLSearchParams(prev);
+          params.delete('edit');
+          return params;
+        });
+      }
+    }
+  }, [searchParams, cityList, selectCity, setSearchParams]);
 
   // 获取选中的城市对象
   const selectedCity = selectedCityId
-    ? cityList.find((c) => c.id === selectedCityId) ?? null
+    ? (cityList.find((c) => c.id === selectedCityId) ?? null)
     : null;
 
   /**
@@ -84,6 +135,7 @@ export function MapPage() {
       setStoreMapView(view);
       // 切换标签时重置为列表视图
       selectCity(null);
+      setSelectedWishlistItem(null);
       setViewMode('list');
     },
     [setStoreMapView, selectCity]
@@ -124,10 +176,32 @@ export function MapPage() {
    */
   const handleWishlistMarkerClick = useCallback(
     (itemId: string) => {
-      // 点击愿望清单标记时，暂时只打印日志
-      console.log('点击愿望清单标记:', itemId);
+      const item = wishlistItems.find((w) => w.id === itemId);
+      if (item) {
+        setSelectedWishlistItem(item);
+        selectCity(null);
+        setViewMode('detail');
+      }
     },
-    []
+    [wishlistItems, selectCity]
+  );
+
+  /**
+   * 处理愿望清单列表项点击
+   */
+  const handleWishlistItemClick = useCallback(
+    (item: WishlistItem) => {
+      setSelectedWishlistItem(item);
+      selectCity(null);
+      setViewMode('detail');
+      setViewKey((k) => k + 1);
+      setMapViewImmediate({
+        lat: item.latitude,
+        lng: item.longitude,
+        zoom: 12,
+      });
+    },
+    [selectCity, setMapViewImmediate]
   );
 
   /**
@@ -179,6 +253,12 @@ export function MapPage() {
     async (data: CityFormInput) => {
       if (!clickedCoords) return;
 
+      // 上传封面图片（如果有）
+      const coverImageUrl = await uploadImage(
+        data.coverImage as File | undefined,
+        user?.id ?? ''
+      );
+
       await createCity.mutateAsync({
         user_id: user?.id ?? '',
         city_name: data.cityName,
@@ -186,14 +266,15 @@ export function MapPage() {
         continent: data.continent,
         latitude: clickedCoords.lat,
         longitude: clickedCoords.lng,
-        visited_at: data.visitedAt instanceof Date
-          ? data.visitedAt.toISOString().split('T')[0]
-          : String(data.visitedAt),
+        visited_at:
+          data.visitedAt instanceof Date
+            ? data.visitedAt.toISOString().split('T')[0]
+            : String(data.visitedAt),
         trip_type: data.tripType,
         rating: data.rating,
         notes: data.notes,
         tags: data.tags,
-        cover_image: undefined,
+        cover_image: coverImageUrl,
         is_favorite: data.isFavorite ?? false,
       });
 
@@ -202,7 +283,35 @@ export function MapPage() {
       setClickedCoords(null);
       setGeocodingData(null);
     },
-    [clickedCoords, createCity]
+    [clickedCoords, createCity, user]
+  );
+
+  /**
+   * 处理愿望清单表单提交
+   * 需求 4.1, 4.2: 在愿望清单视图下点击地图创建愿望清单项目
+   */
+  const handleWishlistFormSubmit = useCallback(
+    async (data: WishlistFormInput) => {
+      if (!clickedCoords) return;
+
+      await createWishlistItem.mutateAsync({
+        user_id: user?.id ?? '',
+        city_name: data.cityName,
+        country_name: data.countryName,
+        continent: data.continent,
+        latitude: clickedCoords.lat,
+        longitude: clickedCoords.lng,
+        priority: data.priority,
+        expected_season: data.expectedSeason,
+        notes: data.notes,
+      });
+
+      // 创建成功，返回列表视图
+      setViewMode('list');
+      setClickedCoords(null);
+      setGeocodingData(null);
+    },
+    [clickedCoords, createWishlistItem, user]
   );
 
   /**
@@ -219,15 +328,66 @@ export function MapPage() {
    */
   const handleBackToList = useCallback(() => {
     selectCity(null);
+    setSelectedWishlistItem(null);
     setViewMode('list');
   }, [selectCity]);
 
   /**
-   * 编辑城市（暂时返回列表）
+   * 编辑城市 — 切换到编辑表单视图
    */
-  const handleEditCity = useCallback((_city: City) => {
-    // TODO: 实现编辑模式
-    console.log('编辑城市:', _city.id);
+  const handleEditCity = useCallback((city: City) => {
+    setEditingCity(city);
+    setViewMode('edit');
+  }, []);
+
+  /**
+   * 处理城市编辑表单提交
+   */
+  const handleEditFormSubmit = useCallback(
+    async (data: CityFormInput) => {
+      if (!editingCity) return;
+
+      // 上传封面图片（如果有新图片）
+      const coverImageUrl = await uploadImage(
+        data.coverImage as File | undefined,
+        user?.id ?? ''
+      );
+
+      await updateCity.mutateAsync({
+        id: editingCity.id,
+        updates: {
+          city_name: data.cityName,
+          country_name: data.countryName,
+          continent: data.continent,
+          latitude: editingCity.latitude,
+          longitude: editingCity.longitude,
+          visited_at:
+            data.visitedAt instanceof Date
+              ? data.visitedAt.toISOString().split('T')[0]
+              : String(data.visitedAt),
+          trip_type: data.tripType,
+          rating: data.rating,
+          notes: data.notes,
+          tags: data.tags,
+          // 有新图片用新 URL，没有则保留原图
+          cover_image: coverImageUrl ?? editingCity.cover_image,
+          is_favorite: data.isFavorite ?? false,
+        },
+      });
+
+      // 更新成功，返回详情视图
+      setEditingCity(null);
+      setViewMode('detail');
+    },
+    [editingCity, updateCity, user]
+  );
+
+  /**
+   * 取消编辑，返回详情视图
+   */
+  const handleEditCancel = useCallback(() => {
+    setEditingCity(null);
+    setViewMode('detail');
   }, []);
 
   /**
@@ -239,25 +399,44 @@ export function MapPage() {
   }, [selectCity]);
 
   /**
-   * 获取侧边栏标题
-   * 根据当前视图模式和 mapView 状态返回对应标题
+   * 处理愿望清单转换表单提交
    */
-  const getSidebarTitle = (): string => {
-    if (viewMode === 'create') return '添加城市';
-    if (viewMode === 'detail') return '城市详情';
-    if (mapView === 'wishlist') return '愿望清单';
-    return '我的足迹';
-  };
+  const handleConvertSubmit = useCallback(
+    async (formData: CityFormInput) => {
+      await submitConvert(formData);
+      // 转换成功后返回列表
+      setSelectedWishlistItem(null);
+      setViewMode('list');
+    },
+    [submitConvert]
+  );
 
   /** 渲染侧边栏内容 */
   const renderSidebarContent = () => {
     switch (viewMode) {
       case 'create':
-        return clickedCoords ? (
+        if (!clickedCoords) return null;
+        // 根据当前 mapView 状态决定显示城市表单还是愿望清单表单
+        if (mapView === 'wishlist') {
+          return (
+            <div className="map-sidebar-form">
+              <h2 className="map-sidebar-form-title">添加到愿望清单</h2>
+              <WishlistForm
+                key={`wl-${clickedCoords.lat}-${clickedCoords.lng}`}
+                coordinates={clickedCoords}
+                geocodingData={geocodingData ?? undefined}
+                isLoading={isGeocoding}
+                onSubmit={handleWishlistFormSubmit}
+                onCancel={handleFormCancel}
+              />
+            </div>
+          );
+        }
+        return (
           <div className="map-sidebar-form">
             <h2 className="map-sidebar-form-title">添加城市记录</h2>
             <CityForm
-              key={`${clickedCoords.lat}-${clickedCoords.lng}`}
+              key={`city-${clickedCoords.lat}-${clickedCoords.lng}`}
               coordinates={clickedCoords}
               geocodingData={geocodingData ?? undefined}
               isLoading={isGeocoding}
@@ -265,18 +444,59 @@ export function MapPage() {
               onCancel={handleFormCancel}
             />
           </div>
-        ) : null;
+        );
 
       case 'detail':
+        // 愿望清单详情
+        if (selectedWishlistItem) {
+          return (
+            <div className="map-sidebar-detail">
+              <WishlistDetailPanel
+                item={selectedWishlistItem}
+                onDeleteSuccess={handleBackToList}
+                onConvert={startConvert}
+                onBack={handleBackToList}
+              />
+            </div>
+          );
+        }
+        // 城市详情
         return selectedCity ? (
           <div className="map-sidebar-detail">
-            <button className="map-sidebar-back" onClick={handleBackToList}>
-              ← 返回列表
-            </button>
             <CityDetailPanel
               city={selectedCity}
               onEdit={handleEditCity}
               onDeleteSuccess={handleDeleteSuccess}
+              onBack={handleBackToList}
+            />
+          </div>
+        ) : (
+          renderListContent()
+        );
+
+      case 'edit':
+        return editingCity ? (
+          <div className="map-sidebar-form">
+            <BackButton label="返回详情" onClick={handleEditCancel} />
+            <h2 className="map-sidebar-form-title">编辑城市记录</h2>
+            <CityForm
+              key={`edit-${editingCity.id}`}
+              coordinates={{ lat: editingCity.latitude, lng: editingCity.longitude }}
+              initialData={{
+                cityName: editingCity.city_name,
+                countryName: editingCity.country_name,
+                continent: editingCity.continent as any,
+                latitude: editingCity.latitude,
+                longitude: editingCity.longitude,
+                visitedAt: new Date(editingCity.visited_at),
+                tripType: editingCity.trip_type as any,
+                rating: editingCity.rating,
+                notes: editingCity.notes,
+                tags: editingCity.tags,
+                isFavorite: editingCity.is_favorite,
+              }}
+              onSubmit={handleEditFormSubmit}
+              onCancel={handleEditCancel}
             />
           </div>
         ) : (
@@ -294,7 +514,12 @@ export function MapPage() {
    */
   const renderListContent = () => {
     if (mapView === 'wishlist') {
-      return <WishlistList />;
+      return (
+        <WishlistList
+          onItemClick={handleWishlistItemClick}
+          selectedItemId={selectedWishlistItem?.id}
+        />
+      );
     }
     return <CityList onCityClick={handleCityClick} selectedCityId={selectedCityId ?? undefined} />;
   };
@@ -303,19 +528,6 @@ export function MapPage() {
     <div className="map-page">
       {/* 侧边栏 */}
       <aside className={`map-sidebar ${sidebarOpen ? 'map-sidebar-open' : 'map-sidebar-closed'}`}>
-        <div className="map-sidebar-header">
-          <h1 className="map-sidebar-title">
-            {getSidebarTitle()}
-          </h1>
-          <button
-            className="map-sidebar-toggle"
-            onClick={toggleSidebar}
-            aria-label={sidebarOpen ? '关闭侧边栏' : '打开侧边栏'}
-          >
-            {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-
         {sidebarOpen && (
           <>
             {/* 视图切换标签：仅在列表模式下显示 */}
@@ -335,9 +547,7 @@ export function MapPage() {
               </div>
             )}
 
-            <div className="map-sidebar-content">
-              {renderSidebarContent()}
-            </div>
+            <div className="map-sidebar-content">{renderSidebarContent()}</div>
           </>
         )}
       </aside>
@@ -373,14 +583,39 @@ export function MapPage() {
           </button>
         )}
 
+        {/* 地图图例 */}
+        <MapLegend mapView={mapView} />
+
         {/* 提示文字 */}
         {viewMode === 'list' && (
           <div className="map-hint">
             <Plus size={16} />
-            <span>点击地图添加城市</span>
+            <span>{mapView === 'wishlist' ? '点击地图添加愿望清单' : '点击地图添加城市'}</span>
           </div>
         )}
       </main>
+
+      {/* 愿望清单转换为城市记录的模态框 */}
+      {isConverting && prefilledData && (
+        <Modal isOpen={isConverting} onClose={cancelConvert} title="转换为城市记录">
+          <CityForm
+            initialData={{
+              cityName: prefilledData.cityName,
+              countryName: prefilledData.countryName,
+              continent: prefilledData.continent as any,
+              latitude: prefilledData.latitude,
+              longitude: prefilledData.longitude,
+            }}
+            coordinates={{
+              lat: prefilledData.latitude,
+              lng: prefilledData.longitude,
+            }}
+            isLoading={isConvertSubmitting}
+            onSubmit={handleConvertSubmit}
+            onCancel={cancelConvert}
+          />
+        </Modal>
+      )}
     </div>
   );
 }

@@ -52,6 +52,8 @@ interface WishlistFormProps {
   onSubmit: (data: WishlistFormInput) => Promise<void>;
   /** 取消回调 */
   onCancel: () => void;
+  /** 提交按钮文字，默认"添加到愿望清单" */
+  submitLabel?: string;
 }
 
 export const WishlistForm: React.FC<WishlistFormProps> = ({
@@ -61,15 +63,17 @@ export const WishlistForm: React.FC<WishlistFormProps> = ({
   isLoading = false,
   onSubmit,
   onCancel,
+  submitLabel = '添加到愿望清单',
 }) => {
   const {
     register,
     handleSubmit,
     setValue,
     watch,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<WishlistFormValues, unknown, WishlistFormInput>({
     resolver: zodResolver(wishlistFormSchema),
+    mode: 'onTouched',
     defaultValues: {
       cityName: '',
       countryName: '',
@@ -117,7 +121,10 @@ export const WishlistForm: React.FC<WishlistFormProps> = ({
     >
       {/* 城市名称 */}
       <div className="wishlist-form__field">
-        <label htmlFor="wl-cityName" className="wishlist-form__label wishlist-form__label--required">
+        <label
+          htmlFor="wl-cityName"
+          className="wishlist-form__label wishlist-form__label--required"
+        >
           城市名称
         </label>
         <Input
@@ -251,14 +258,14 @@ export const WishlistForm: React.FC<WishlistFormProps> = ({
         <Button type="button" variant="secondary" onClick={onCancel} disabled={isSubmitting}>
           取消
         </Button>
-        <Button type="submit" disabled={isSubmitting || isLoading}>
+        <Button type="submit" disabled={isSubmitting || isLoading || !isValid}>
           {isSubmitting ? (
             <>
               <Spinner size="sm" />
               <span style={{ marginLeft: '0.5rem' }}>提交中...</span>
             </>
           ) : (
-            '添加到愿望清单'
+            submitLabel
           )}
         </Button>
       </div>

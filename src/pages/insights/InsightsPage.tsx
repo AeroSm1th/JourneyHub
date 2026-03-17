@@ -23,6 +23,7 @@ import {
   TopCitiesRanking,
 } from '@/components/charts';
 import { Spinner } from '@/components/common/Spinner';
+import { toGeoJsonCountryName } from '@/components/charts/countryNameMap';
 import type { WorldMapDataItem } from '@/components/charts';
 import type { City } from '@/types/database';
 import './InsightsPage.css';
@@ -33,7 +34,7 @@ import './InsightsPage.css';
 function buildWorldMapData(cities: City[]): WorldMapDataItem[] {
   const countryStats = calculateCountryStatistics(cities);
   return countryStats.map((cs) => ({
-    name: cs.countryName,
+    name: toGeoJsonCountryName(cs.countryName),
     value: cs.cityCount,
   }));
 }
@@ -99,9 +100,7 @@ export default function InsightsPage() {
         <div className="insights-empty">
           <span className="insights-empty-icon">📊</span>
           <h2 className="insights-empty-title">暂无统计数据</h2>
-          <p className="insights-empty-text">
-            在地图上添加你的第一个城市，开始记录旅行足迹吧
-          </p>
+          <p className="insights-empty-text">在地图上添加你的第一个城市，开始记录旅行足迹吧</p>
         </div>
       </div>
     );

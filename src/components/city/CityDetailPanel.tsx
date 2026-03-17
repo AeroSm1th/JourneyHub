@@ -5,11 +5,17 @@
  * 验证需求: 3.7, 3.8, 3.9
  */
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { City } from '@/types/database';
 import { useDeleteCity } from '@/features/cities/hooks/useDeleteCity';
+import { useUpdateCity } from '@/features/cities/hooks/useUpdateCity';
+import { useAuthStore } from '@/store/authStore';
+import { uploadImage } from '@/utils/storage';
 import { Button } from '@/components/common/Button';
+import { Modal } from '@/components/common/Modal';
 import { ConfirmDialog } from '@/components/common/ConfirmDialog';
+import { CityForm } from './CityForm';
+import type { CityFormInput } from '@/schemas/citySchema';
 import './CityDetailPanel.css';
 
 interface CityDetailPanelProps {
@@ -32,6 +38,16 @@ interface CityDetailPanelProps {
    * 关闭面板回调
    */
   onClose?: () => void;
+
+  /**
+   * 返回列表回调（显示在标题行右侧）
+   */
+  onBack?: () => void;
+
+  /**
+   * 返回按钮文字
+   */
+  backLabel?: string;
 }
 
 /**
@@ -70,9 +86,48 @@ const formatTripType = (tripType: string): string => {
  * />
  * ```
  */
-export function CityDetailPanel({ city, onEdit, onDeleteSuccess, onClose }: CityDetailPanelProps) {
+export function CityDetailPanel({
+  city,
+  onEdit,
+  onDeleteSuccess,
+  onClose,
+  onBack,
+  backLabel = '返回列表',
+}: CityDetailPanelProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const deleteCity = useDeleteCity();
+  const updateCity = useUpdateCity();
+  const { user } = useAuthStore();
+
+  // 处理编辑表单提交
+  const handleEditSubmit = useCallback(
+    async (data: CityFormInput) => {
+      const coverImageUrl = await uploadImage(data.coverImage as File | undefined, user?.id ?? '');
+      await updateCity.mutateAsync({
+        id: city.id,
+        updates: {
+          city_name: data.cityName,
+          country_name: data.countryName,
+          continent: data.continent,
+          latitude: city.latitude,
+          longitude: city.longitude,
+          visited_at:
+            data.visitedAt instanceof Date
+              ? data.visitedAt.toISOString().split('T')[0]
+              : String(data.visitedAt),
+          trip_type: data.tripType,
+          rating: data.rating,
+          notes: data.notes,
+          tags: data.tags,
+          cover_image: coverImageUrl ?? city.cover_image,
+          is_favorite: data.isFavorite ?? false,
+        },
+      });
+      setShowEditModal(false);
+    },
+    [city, updateCity, user]
+  );
 
   // 处理删除确认
   const handleDeleteConfirm = async () => {
@@ -94,28 +149,35 @@ export function CityDetailPanel({ city, onEdit, onDeleteSuccess, onClose }: City
           <h2 className="city-detail-title">{city.city_name}</h2>
           {city.is_favorite && (
             <span className="city-detail-favorite" title="收藏">
-              ⭐
+              ❤️
             </span>
           )}
         </div>
-        {onClose && (
-          <button className="city-detail-close" onClick={onClose} aria-label="关闭">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        )}
+        <div className="city-detail-header-actions">
+          {onBack && (
+            <Button variant="ghost" size="sm" onClick={onBack}>
+              ← {backLabel}
+            </Button>
+          )}
+          {onClose && (
+            <button className="city-detail-close" onClick={onClose} aria-label="关闭">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* 封面图 */}
@@ -225,7 +287,11 @@ export function CityDetailPanel({ city, onEdit, onDeleteSuccess, onClose }: City
 
       {/* 操作按钮 */}
       <div className="city-detail-actions">
-        <Button variant="primary" onClick={() => onEdit?.(city)} disabled={deleteCity.isPending}>
+        <Button
+          variant="primary"
+          onClick={() => setShowEditModal(true)}
+          disabled={deleteCity.isPending}
+        >
           编辑
         </Button>
         <Button
@@ -237,13 +303,45 @@ export function CityDetailPanel({ city, onEdit, onDeleteSuccess, onClose }: City
         </Button>
       </div>
 
+      {/* 编辑悬浮窗 */}
+      <Modal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        title="编辑城市记录"
+        size="lg"
+      >
+        <CityForm
+          key={`edit-${city.id}`}
+          coordinates={{ lat: city.latitude, lng: city.longitude }}
+          initialData={{
+            cityName: city.city_name,
+            countryName: city.country_name,
+            continent: city.continent as any,
+            latitude: city.latitude,
+            longitude: city.longitude,
+            visitedAt: new Date(city.visited_at),
+            tripType: city.trip_type as any,
+            rating: city.rating,
+            notes: city.notes,
+            tags: city.tags,
+            isFavorite: city.is_favorite,
+          }}
+          onSubmit={handleEditSubmit}
+          onCancel={() => setShowEditModal(false)}
+        />
+      </Modal>
+
       {/* 删除确认对话框 */}
       <ConfirmDialog
         isOpen={showDeleteConfirm}
         onClose={() => setShowDeleteConfirm(false)}
         onConfirm={handleDeleteConfirm}
         title="确认删除"
-        message={<>确定要删除城市记录 <strong>{city.city_name}</strong> 吗？</>}
+        message={
+          <>
+            确定要删除城市记录 <strong>{city.city_name}</strong> 吗？
+          </>
+        }
         warning="此操作无法撤销，删除后数据将无法恢复。"
         confirmText="确认删除"
         cancelText="取消"

@@ -12,6 +12,9 @@
 // 基础实体类型（从 database.ts 导入）
 // ============================================================================
 
+// 文件内部使用的导入
+import type { City, WishlistItem, Trip, TripDay, TripTask } from './database';
+
 export type { User, City, WishlistItem, Trip, TripDay, TripTask, Share } from './database';
 
 // ============================================================================

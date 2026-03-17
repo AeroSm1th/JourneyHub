@@ -124,12 +124,5 @@ export function TopCitiesRanking({
 }: TopCitiesRankingProps) {
   const option = useMemo(() => buildOption(data), [data]);
 
-  return (
-    <EChartsWrapper
-      option={option}
-      height={height}
-      loading={loading}
-      className={className}
-    />
-  );
+  return <EChartsWrapper option={option} height={height} loading={loading} className={className} />;
 }

@@ -133,9 +133,10 @@ export const useConvertToCity = (): UseConvertToCityReturn => {
           continent: formData.continent,
           latitude: formData.latitude,
           longitude: formData.longitude,
-          visited_at: formData.visitedAt instanceof Date
-            ? formData.visitedAt.toISOString().split('T')[0]
-            : String(formData.visitedAt),
+          visited_at:
+            formData.visitedAt instanceof Date
+              ? formData.visitedAt.toISOString().split('T')[0]
+              : String(formData.visitedAt),
           trip_type: formData.tripType as 'leisure' | 'business' | 'transit',
           rating: formData.rating,
           notes: formData.notes,

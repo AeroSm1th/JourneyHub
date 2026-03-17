@@ -39,14 +39,8 @@ export function WishlistList({ onItemClick, selectedItemId }: WishlistListProps)
   const { data, isLoading, error } = useWishlist();
   const items = data as WishlistItem[] | undefined;
 
-  const {
-    isConverting,
-    prefilledData,
-    startConvert,
-    cancelConvert,
-    submitConvert,
-    isSubmitting,
-  } = useConvertToCity();
+  const { isConverting, prefilledData, startConvert, cancelConvert, submitConvert, isSubmitting } =
+    useConvertToCity();
 
   // 加载状态
   if (isLoading) {
@@ -107,11 +101,7 @@ export function WishlistList({ onItemClick, selectedItemId }: WishlistListProps)
 
       {/* 转换表单模态框 */}
       {isConverting && prefilledData && (
-        <Modal
-          isOpen={isConverting}
-          onClose={cancelConvert}
-          title="转换为城市记录"
-        >
+        <Modal isOpen={isConverting} onClose={cancelConvert} title="转换为城市记录">
           <CityForm
             initialData={{
               cityName: prefilledData.cityName,

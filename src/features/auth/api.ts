@@ -96,14 +96,23 @@ export async function signIn(email: string, password: string): Promise<User> {
     throw new Error('登录失败：未返回用户信息');
   }
 
-  // 直接使用 Supabase auth 返回的用户信息
-  const user: User = {
+  // 查询 users 表获取完整资料（包含 nickname、avatar_url 等）
+  const { data: profile } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', data.user.id)
+    .single();
+
+  // 如果 users 表有记录则返回完整资料，否则回退到 auth 基础信息
+  if (profile) {
+    return profile;
+  }
+
+  return {
     id: data.user.id,
     email: data.user.email!,
     created_at: data.user.created_at,
   };
-
-  return user;
 }
 
 /**
@@ -153,6 +162,16 @@ export async function getCurrentUser(): Promise<User | null> {
   }
 
   // 直接使用 Supabase auth 的用户信息
+  const { data: profile } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', session.user.id)
+    .single();
+
+  if (profile) {
+    return profile;
+  }
+
   return {
     id: session.user.id,
     email: session.user.email!,

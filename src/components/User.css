@@ -35,6 +35,12 @@
   user-select: none;
 }
 
+.user-avatar-img {
+  object-fit: cover;
+  background: none;
+  color: transparent;
+}
+
 /* 下拉面板 */
 .user-dropdown {
   position: absolute;
@@ -80,6 +86,12 @@
   font-weight: 600;
   font-size: 0.85rem;
   flex-shrink: 0;
+}
+
+.user-dropdown-avatar-img {
+  object-fit: cover;
+  background: none;
+  color: transparent;
 }
 
 .user-dropdown-email {

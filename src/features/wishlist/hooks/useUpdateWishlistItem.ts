@@ -40,10 +40,7 @@ export const useUpdateWishlistItem = () => {
     mutationFn: ({ id, updates }) => wishlistApi.update(id, updates),
     onSuccess: (updatedItem) => {
       // 更新单个项目缓存
-      queryClient.setQueryData<WishlistItem>(
-        wishlistItemQueryKey(updatedItem.id),
-        updatedItem
-      );
+      queryClient.setQueryData<WishlistItem>(wishlistItemQueryKey(updatedItem.id), updatedItem);
 
       // 更新列表缓存
       queryClient.setQueryData<WishlistItem[]>(WISHLIST_QUERY_KEY, (oldItems) => {

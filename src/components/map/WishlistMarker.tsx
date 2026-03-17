@@ -23,20 +23,22 @@ interface WishlistMarkerProps {
 }
 
 /**
+ * 优先级颜色映射（1-5，从浅到深）
+ */
+const priorityColors: Record<number, string> = {
+  1: '#fde68a', // 最浅 - 淡黄色
+  2: '#fbbf24', // 较浅 - 琥珀黄
+  3: '#f59e0b', // 中等 - 琥珀色
+  4: '#ea580c', // 较深 - 深橙色
+  5: '#dc2626', // 最深 - 红色
+};
+
+/**
  * 根据优先级创建自定义图标
- * 使用橙色系颜色区分愿望清单和已访问城市
+ * 使用从浅到深的5级颜色区分优先级
  */
 const createWishlistIcon = (item: WishlistItem): L.DivIcon => {
-  // 根据优先级确定图标颜色（橙色系）
-  let iconColor = '#f59e0b'; // 默认琥珀色
-
-  if (item.priority >= 4) {
-    iconColor = '#ea580c'; // 高优先级用深橙色
-  } else if (item.priority >= 3) {
-    iconColor = '#f59e0b'; // 中优先级用琥珀色
-  } else {
-    iconColor = '#fbbf24'; // 低优先级用黄色
-  }
+  const iconColor = priorityColors[item.priority] ?? priorityColors[3];
 
   // 使用星星图标区分愿望清单（已访问城市使用定位图标）
   return L.divIcon({

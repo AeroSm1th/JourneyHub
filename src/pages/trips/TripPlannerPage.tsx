@@ -12,7 +12,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { BackButton } from '@/components/common/BackButton';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useTrip } from '@/features/trips/hooks/useTrip';
 import { useCreateTrip } from '@/features/trips/hooks/useCreateTrip';
@@ -165,9 +165,7 @@ export default function TripPlannerPage() {
     return (
       <div className="trip-planner-page">
         <div className="trip-planner-page__empty">
-          <h2 className="trip-planner-page__empty-title">
-            {error ? '加载失败' : '行程未找到'}
-          </h2>
+          <h2 className="trip-planner-page__empty-title">{error ? '加载失败' : '行程未找到'}</h2>
           <p className="trip-planner-page__empty-text">
             {error ? error.message : '该行程记录不存在或已被删除'}
           </p>
@@ -181,10 +179,7 @@ export default function TripPlannerPage() {
     <div className="trip-planner-page">
       {/* 顶部导航 */}
       <div className="trip-planner-page__nav">
-        <button className="trip-planner-page__back" onClick={handleBack} aria-label="返回行程列表">
-          <ArrowLeft size={20} />
-          <span>返回</span>
-        </button>
+        <BackButton label="返回" onClick={handleBack} ariaLabel="返回行程列表" />
         <h1 className="trip-planner-page__title">
           {isEditMode ? `编辑行程：${trip?.title ?? ''}` : '创建新行程'}
         </h1>
@@ -253,23 +248,13 @@ export default function TripPlannerPage() {
             )}
 
             {activeTab === 'schedule' && (
-              <TripDayEditor
-                tripId={trip.id}
-                startDate={trip.start_date}
-                endDate={trip.end_date}
-              />
+              <TripDayEditor tripId={trip.id} startDate={trip.start_date} endDate={trip.end_date} />
             )}
 
-            {activeTab === 'tasks' && (
-              <TripTaskList tripId={trip.id} />
-            )}
+            {activeTab === 'tasks' && <TripTaskList tripId={trip.id} />}
 
             {activeTab === 'timeline' && (
-              <TripTimeline
-                tripId={trip.id}
-                startDate={trip.start_date}
-                endDate={trip.end_date}
-              />
+              <TripTimeline tripId={trip.id} startDate={trip.start_date} endDate={trip.end_date} />
             )}
           </>
         )}

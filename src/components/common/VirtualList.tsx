@@ -77,7 +77,7 @@ export function VirtualList<T>({
       >
         {virtualizer.getVirtualItems().map((virtualItem) => (
           <div
-            key={virtualItem.key}
+            key={String(virtualItem.key)}
             style={{
               position: 'absolute',
               top: 0,

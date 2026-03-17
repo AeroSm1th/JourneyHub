@@ -79,7 +79,9 @@
   font-weight: 500;
   cursor: pointer;
   border-bottom: 2px solid transparent;
-  transition: color 0.2s, border-color 0.2s;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -137,7 +139,6 @@
   font-size: 0.875rem;
   color: #9ca3af;
 }
-
 
 /* 响应式 */
 @media (max-width: 767px) {

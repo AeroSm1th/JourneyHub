@@ -138,7 +138,7 @@ export function TripTimeline({
   const days = trip_days ?? (daysQuery.data as TripDay[] | undefined) ?? [];
   const tasks = trip_tasks ?? (tasksQuery.data as TripTask[] | undefined) ?? [];
 
-  const isLoading = !trip_days && daysQuery.isLoading || !trip_tasks && tasksQuery.isLoading;
+  const isLoading = (!trip_days && daysQuery.isLoading) || (!trip_tasks && tasksQuery.isLoading);
   const error = (!trip_days && daysQuery.error) || (!trip_tasks && tasksQuery.error);
 
   // 构建时间线节点
@@ -191,9 +191,7 @@ export function TripTimeline({
           >
             {/* 时间线圆点 */}
             <div className="trip-timeline__dot">
-              {node.status === 'today' && (
-                <span className="trip-timeline__today-badge">今天</span>
-              )}
+              {node.status === 'today' && <span className="trip-timeline__today-badge">今天</span>}
             </div>
 
             {/* 节点内容 */}
@@ -203,13 +201,9 @@ export function TripTimeline({
                 <time className="trip-timeline__date">{formatDate(node.date)}</time>
               </div>
 
-              {node.title && (
-                <p className="trip-timeline__day-title">{node.title}</p>
-              )}
+              {node.title && <p className="trip-timeline__day-title">{node.title}</p>}
 
-              {node.notes && (
-                <p className="trip-timeline__day-notes">{node.notes}</p>
-              )}
+              {node.notes && <p className="trip-timeline__day-notes">{node.notes}</p>}
 
               {/* 该天的待办事项 */}
               {node.tasks.length > 0 && (
@@ -219,9 +213,7 @@ export function TripTimeline({
                       key={task.id}
                       className={`trip-timeline__task${task.is_done ? ' trip-timeline__task--done' : ''}`}
                     >
-                      <span className="trip-timeline__task-icon">
-                        {task.is_done ? '☑' : '☐'}
-                      </span>
+                      <span className="trip-timeline__task-icon">{task.is_done ? '☑' : '☐'}</span>
                       <span className="trip-timeline__task-content">{task.content}</span>
                     </li>
                   ))}

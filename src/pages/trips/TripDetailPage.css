@@ -5,7 +5,7 @@
 .trip-detail-page {
   display: flex;
   flex-direction: column;
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
   width: 100%;
   min-height: 100%;
@@ -110,7 +110,6 @@
 .trip-detail-page-back-link:hover {
   background: #2563eb;
 }
-
 
 /* 标题和状态 */
 .trip-detail-header {
@@ -335,6 +334,114 @@
   color: #9ca3af;
 }
 
+/* ===== 编辑模式样式 ===== */
+
+/* 空状态提示 */
+.trip-detail-empty-hint {
+  text-align: center;
+  color: #9ca3af;
+  padding: 1rem;
+  font-size: 0.875rem;
+  font-style: italic;
+  margin: 0;
+}
+
+/* 编辑模式输入框 */
+.trip-detail-inline-input {
+  padding: 6px 10px;
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  min-width: 120px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.trip-detail-inline-input--title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  flex: 1;
+  width: auto;
+}
+
+/* 编辑模式文本域 */
+.trip-detail-inline-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  resize: vertical;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+/* 内联编辑操作栏（用于 block 模式） */
+.trip-detail-inline-edit-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* 待办事项底部保存按钮 */
+.trip-detail-task-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.trip-detail-task-save {
+  padding: 6px 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #f3f4f6;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: not-allowed;
+  transition: all 0.25s ease;
+}
+
+.trip-detail-task-save--active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+.trip-detail-task-save--active:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.trip-detail-task-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 待办事项 checkbox（真实 input） */
+.trip-detail-task-checkbox-input {
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  cursor: pointer;
+  accent-color: #3b82f6;
+  margin: 0;
+}
+
+/* 有变更的待办事项高亮 */
+.trip-detail-task-changed {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
 /* 响应式 */
 @media (max-width: 767px) {
   .trip-detail-page-nav {
@@ -456,5 +563,34 @@
   .trip-detail-status-completed {
     background-color: rgba(107, 114, 128, 0.2);
     color: #9ca3af;
+  }
+
+  .trip-detail-inline-input {
+    background: #1f2937;
+    color: #f9fafb;
+    border-color: #60a5fa;
+  }
+
+  .trip-detail-inline-textarea {
+    background: #1f2937;
+    color: #f9fafb;
+    border-color: #60a5fa;
+  }
+
+  .trip-detail-task-changed {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: #3b82f6;
+  }
+
+  .trip-detail-task-save {
+    background: #374151;
+    border-color: #4b5563;
+    color: #6b7280;
+  }
+
+  .trip-detail-task-save--active {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: #ffffff;
   }
 }

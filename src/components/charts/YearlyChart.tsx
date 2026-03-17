@@ -32,9 +32,7 @@ export interface YearlyChartProps {
  */
 function buildOption(data: Record<string, number>): EChartsOption {
   // 按年份升序排列
-  const sortedEntries = Object.entries(data).sort(
-    ([a], [b]) => Number(a) - Number(b)
-  );
+  const sortedEntries = Object.entries(data).sort(([a], [b]) => Number(a) - Number(b));
 
   const years = sortedEntries.map(([year]) => year);
   const values = sortedEntries.map(([, count]) => count);

@@ -6,12 +6,16 @@
  */
 
 import { useState, useRef, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/authStore';
+import { useProfile } from '@/features/profile/hooks/useProfile';
 import { signOut } from '@/features/auth/api';
 import './User.css';
 
 function User() {
   const { user, clearAuth } = useAuthStore();
+  const { data: profile } = useProfile();
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -28,12 +32,15 @@ function User() {
 
   if (!user) return null;
 
-  // 取邮箱首字母作为头像
+  // 取邮箱首字母作为头像回退
   const initial = (user.email ?? 'U')[0].toUpperCase();
+  const avatarUrl = profile?.avatar_url;
 
   const handleLogout = async () => {
     try {
+      // 清除认证状态和所有查询缓存，防止切换账号时数据泄露
       clearAuth();
+      queryClient.clear();
       await signOut();
     } catch (error) {
       console.error('退出登录失败:', error);
@@ -50,13 +57,25 @@ function User() {
         aria-label="用户菜单"
         aria-expanded={open}
       >
-        <span className="user-avatar">{initial}</span>
+        {avatarUrl ? (
+          <img className="user-avatar user-avatar-img" src={avatarUrl} alt="头像" />
+        ) : (
+          <span className="user-avatar">{initial}</span>
+        )}
       </button>
 
       {open && (
         <div className="user-dropdown">
           <div className="user-dropdown-info">
-            <span className="user-dropdown-avatar">{initial}</span>
+            {avatarUrl ? (
+              <img
+                className="user-dropdown-avatar user-dropdown-avatar-img"
+                src={avatarUrl}
+                alt="头像"
+              />
+            ) : (
+              <span className="user-dropdown-avatar">{initial}</span>
+            )}
             <span className="user-dropdown-email">{user.email}</span>
           </div>
           <hr className="user-dropdown-divider" />

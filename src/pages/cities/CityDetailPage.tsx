@@ -6,10 +6,11 @@
  */
 
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import { useCity } from '@/features/cities/hooks/useCity';
 import { CityDetailPanel } from '@/components/city/CityDetailPanel';
 import { Spinner } from '@/components/common/Spinner';
+import { BackButton } from '@/components/common/BackButton';
 import './CityDetailPage.css';
 
 /**
@@ -57,9 +58,7 @@ export default function CityDetailPage() {
       <div className="city-detail-page">
         <div className="city-detail-page-empty">
           <MapPin className="city-detail-page-empty-icon" />
-          <h2 className="city-detail-page-empty-title">
-            {error ? '加载失败' : '城市未找到'}
-          </h2>
+          <h2 className="city-detail-page-empty-title">{error ? '加载失败' : '城市未找到'}</h2>
           <p className="city-detail-page-empty-text">
             {error ? error.message : '该城市记录不存在或已被删除'}
           </p>
@@ -75,19 +74,12 @@ export default function CityDetailPage() {
     <div className="city-detail-page">
       {/* 顶部导航 */}
       <div className="city-detail-page-nav">
-        <button className="city-detail-page-back" onClick={handleBack} aria-label="返回城市列表">
-          <ArrowLeft size={20} />
-          <span>返回</span>
-        </button>
+        <BackButton label="返回" onClick={handleBack} ariaLabel="返回城市列表" />
       </div>
 
       {/* 城市详情 */}
       <div className="city-detail-page-content">
-        <CityDetailPanel
-          city={city}
-          onEdit={handleEdit}
-          onDeleteSuccess={handleDeleteSuccess}
-        />
+        <CityDetailPanel city={city} onEdit={handleEdit} onDeleteSuccess={handleDeleteSuccess} />
       </div>
     </div>
   );

@@ -23,32 +23,36 @@ interface CityMarkerProps {
 }
 
 /**
- * 根据城市属性创建自定义图标
+ * 出行类型颜色映射
+ * - leisure（休闲）：蓝色
+ * - business（商务）：灰蓝色
+ * - transit（中转）：灰色
+ */
+const tripTypeColors: Record<string, string> = {
+  leisure: '#3b82f6',
+  business: '#64748b',
+  transit: '#9ca3af',
+};
+
+/**
+ * 根据出行类型创建自定义图标，收藏城市显示心形角标
  */
 const createCityIcon = (city: City): L.DivIcon => {
-  // 根据收藏状态和评分确定图标颜色
-  let iconColor = '#3b82f6'; // 默认蓝色
-
-  if (city.is_favorite) {
-    iconColor = '#ef4444'; // 收藏的城市用红色
-  } else if (city.rating) {
-    // 根据评分使用不同颜色
-    if (city.rating >= 4) {
-      iconColor = '#10b981'; // 高评分用绿色
-    } else if (city.rating >= 3) {
-      iconColor = '#f59e0b'; // 中等评分用橙色
-    } else {
-      iconColor = '#6b7280'; // 低评分用灰色
-    }
-  }
+  const iconColor = tripTypeColors[city.trip_type] ?? '#3b82f6';
+  const favBadge = city.is_favorite
+    ? '<span class="city-marker-fav"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#ef4444"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>'
+    : '';
 
   return L.divIcon({
     className: 'city-marker-icon',
     html: `
-      <div class="city-marker" style="background-color: ${iconColor}">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-        </svg>
+      <div class="city-marker-wrapper">
+        <div class="city-marker" style="background-color: ${iconColor}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+        </div>
+        ${favBadge}
       </div>
     `,
     iconSize: [32, 40],

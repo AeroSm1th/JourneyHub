@@ -28,6 +28,19 @@
   align-items: center;
   gap: 0.75rem;
   flex: 1;
+  min-width: 0;
+}
+
+.city-detail-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* 头部内的返回按钮不需要额外 margin */
+.city-detail-header-actions .back-button {
+  margin: 0;
 }
 
 .city-detail-title {

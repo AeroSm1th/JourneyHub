@@ -106,7 +106,7 @@ export function ContinentPie({
         }
       });
     },
-    [onContinentClick],
+    [onContinentClick]
   );
 
   return (

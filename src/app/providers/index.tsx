@@ -1,7 +1,6 @@
 /**
  * Providers 统一导出
  *
- * 组合所有应用级别的 Provider
+ * QueryClient 配置已集成到 App.tsx 中，
+ * 此文件保留用于未来可能的 Provider 组件导出。
  */
-
-export { QueryProvider } from './QueryProvider';

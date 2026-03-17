@@ -84,9 +84,7 @@ export default function CitiesPage() {
     if (searchQuery.trim()) {
       const q = searchQuery.trim().toLowerCase();
       result = result.filter(
-        (c) =>
-          c.city_name.toLowerCase().includes(q) ||
-          c.country_name.toLowerCase().includes(q)
+        (c) => c.city_name.toLowerCase().includes(q) || c.country_name.toLowerCase().includes(q)
       );
     }
 
@@ -157,7 +155,7 @@ export default function CitiesPage() {
         <h1 className="cities-page-title">
           我的足迹
           {cities && cities.length > 0 && (
-            <span className="cities-page-count"> · {cities.length} 个城市</span>
+            <span className="cities-page-count"> · {cities.length} 个足迹</span>
           )}
         </h1>
 

@@ -7,7 +7,7 @@
 
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/features/auth/hooks/useAuth';
-import SpinnerFullPage from '@/components/SpinnerFullPage';
+import { Spinner } from '@/components/common/Spinner';
 
 interface ProtectedRouteProps {
   /**
@@ -44,7 +44,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   // 显示加载状态
   if (isLoading) {
-    return <SpinnerFullPage />;
+    return <Spinner size="lg" centered />;
   }
 
   // 未登录用户重定向到登录页面

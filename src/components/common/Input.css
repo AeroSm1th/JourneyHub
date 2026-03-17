@@ -46,6 +46,29 @@
   opacity: 0.6;
 }
 
+/* 日期输入框：点击整个区域即可弹出日期选择器 */
+.input[type='date'] {
+  cursor: pointer;
+}
+
+.input[type='date']::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  color: transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* 让日期输入框支持绝对定位的 picker indicator */
+.input-wrapper:has(.input[type='date']) {
+  position: relative;
+}
+
 .input::placeholder {
   color: var(--color-text-tertiary, #9ca3af);
 }

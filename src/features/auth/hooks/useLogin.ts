@@ -92,10 +92,7 @@ export function useLogin(options?: UseLoginOptions) {
     onSuccess: (user) => {
       // 立即更新 store，确保 navigate 前 ProtectedRoute 能读到 user
       // onAuthStateChange 之后也会触发，但那是异步的，不能依赖它
-      setAuth(
-        { id: user.id, email: user.email, created_at: user.created_at } as any,
-        null,
-      );
+      setAuth({ id: user.id, email: user.email, created_at: user.created_at } as any, null);
 
       // 执行用户自定义的成功回调
       options?.onSuccess?.();

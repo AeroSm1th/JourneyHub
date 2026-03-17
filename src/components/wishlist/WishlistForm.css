@@ -34,6 +34,7 @@
   border: 1px solid #d1d5db;
   border-radius: 0.375rem;
   font-size: 0.875rem;
+  color: #1f2937;
   transition: all 0.2s;
 }
 
@@ -64,6 +65,7 @@
   border: 1px solid #d1d5db;
   border-radius: 0.375rem;
   font-size: 0.875rem;
+  color: #1f2937;
   background-color: white;
   cursor: pointer;
   transition: all 0.2s;
@@ -86,6 +88,7 @@
   border: 1px solid #d1d5db;
   border-radius: 0.375rem;
   font-size: 0.875rem;
+  color: #1f2937;
   resize: vertical;
   min-height: 80px;
   transition: all 0.2s;

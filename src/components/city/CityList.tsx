@@ -55,7 +55,7 @@ function CityListItem({
           <h3 className="city-list-item-name">{city.city_name}</h3>
           {city.is_favorite && (
             <span className="city-list-item-favorite" title="收藏">
-              ⭐
+              ❤️
             </span>
           )}
         </div>
@@ -145,7 +145,7 @@ export function CityList({ onCityClick, selectedCityId }: CityListProps) {
     <div className="city-list-container">
       <div className="city-list-header">
         <h2 className="city-list-title">我的足迹</h2>
-        <span className="city-list-count">{cities.length} 个城市</span>
+        <span className="city-list-count">{cities.length} 个足迹</span>
       </div>
 
       {useVirtual ? (

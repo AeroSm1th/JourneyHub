@@ -108,13 +108,13 @@ function TripListItem({
           </div>
         )}
 
-        {trip.notes && (
-          <p className="trip-list-item-notes">{trip.notes}</p>
-        )}
+        {trip.notes && <p className="trip-list-item-notes">{trip.notes}</p>}
       </div>
 
       {computedStatus === TripStatus.Completed && (
-        <span className="trip-list-item-check" title="已完成">✅</span>
+        <span className="trip-list-item-check" title="已完成">
+          ✅
+        </span>
       )}
     </li>
   );
@@ -201,7 +201,9 @@ export function TripList({ onTripClick, selectedTripId }: TripListProps) {
       {/* 筛选后无结果 */}
       {filteredTrips.length === 0 ? (
         <div className="trip-list-empty">
-          <p className="trip-list-empty-message">没有{FILTER_OPTIONS.find((o) => o.value === filter)?.label}的行程</p>
+          <p className="trip-list-empty-message">
+            没有{FILTER_OPTIONS.find((o) => o.value === filter)?.label}的行程
+          </p>
         </div>
       ) : (
         <ul className="trip-list">

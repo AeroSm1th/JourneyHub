@@ -24,9 +24,10 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
+    mode: 'onTouched',
     defaultValues: {
       email: '',
       password: '',
@@ -118,7 +119,7 @@ export default function RegisterPage() {
         )}
 
         {/* 提交 */}
-        <button type="submit" className="register-btn" disabled={isLoading}>
+        <button type="submit" className="register-btn" disabled={isLoading || !isValid}>
           {isLoading ? '注册中...' : '注册'}
         </button>
 

@@ -6,6 +6,7 @@
  */
 
 import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/authStore';
 import { supabase } from '@/services/supabase/client';
 
@@ -23,6 +24,7 @@ let _authInitializing = false;
  */
 export function useAuth() {
   const { user, session, setAuth, clearAuth } = useAuthStore();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     // 如果已经初始化过，跳过
@@ -60,6 +62,8 @@ export function useAuth() {
         setAuth(currentSession.user, currentSession);
       } else if (event === 'SIGNED_OUT') {
         clearAuth();
+        // 清除所有查询缓存，防止切换账号时数据泄露
+        queryClient.clear();
       } else if (event === 'TOKEN_REFRESHED' && currentSession) {
         setAuth(currentSession.user, currentSession);
       } else if (event === 'USER_UPDATED' && currentSession?.user) {

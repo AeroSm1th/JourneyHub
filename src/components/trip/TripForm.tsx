@@ -74,12 +74,14 @@ export const TripForm: React.FC<TripFormProps> = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<TripFormValues, unknown, TripFormInput>({
     resolver: zodResolver(tripFormSchema),
+    mode: 'onTouched',
     defaultValues: {
       title: initialData?.title ?? '',
-      startDate: initialData?.startDate ?? (undefined as unknown as Date),
+      startDate:
+        initialData?.startDate ?? (new Date().toISOString().split('T')[0] as unknown as Date),
       endDate: initialData?.endDate ?? (undefined as unknown as Date),
       relatedCityId: initialData?.relatedCityId ?? undefined,
       relatedWishlistId: initialData?.relatedWishlistId ?? undefined,
@@ -102,11 +104,7 @@ export const TripForm: React.FC<TripFormProps> = ({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(handleFormSubmit)}
-      className="trip-form"
-      aria-label="行程表单"
-    >
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="trip-form" aria-label="行程表单">
       {/* ===== 基本信息 ===== */}
       <div className="trip-form__section-title">基本信息</div>
 
@@ -140,9 +138,7 @@ export const TripForm: React.FC<TripFormProps> = ({
             className={`trip-form__input ${errors.startDate ? 'trip-form__input--error' : ''}`}
             disabled={isLoading}
           />
-          {errors.startDate && (
-            <p className="trip-form__error">{errors.startDate.message}</p>
-          )}
+          {errors.startDate && <p className="trip-form__error">{errors.startDate.message}</p>}
         </div>
         <div className="trip-form__field">
           <label htmlFor="trip-endDate" className="trip-form__label trip-form__label--required">
@@ -158,9 +154,7 @@ export const TripForm: React.FC<TripFormProps> = ({
             className={`trip-form__input ${errors.endDate ? 'trip-form__input--error' : ''}`}
             disabled={isLoading}
           />
-          {errors.endDate && (
-            <p className="trip-form__error">{errors.endDate.message}</p>
-          )}
+          {errors.endDate && <p className="trip-form__error">{errors.endDate.message}</p>}
         </div>
       </div>
 
@@ -187,9 +181,7 @@ export const TripForm: React.FC<TripFormProps> = ({
             </option>
           ))}
         </select>
-        {errors.relatedCityId && (
-          <p className="trip-form__error">{errors.relatedCityId.message}</p>
-        )}
+        {errors.relatedCityId && <p className="trip-form__error">{errors.relatedCityId.message}</p>}
       </div>
 
       {/* 关联愿望清单 */}
@@ -238,9 +230,7 @@ export const TripForm: React.FC<TripFormProps> = ({
             placeholder="请输入预算金额"
             disabled={isLoading}
           />
-          {errors.budget && (
-            <p className="trip-form__error">{errors.budget.message}</p>
-          )}
+          {errors.budget && <p className="trip-form__error">{errors.budget.message}</p>}
         </div>
         <div className="trip-form__field">
           <label htmlFor="trip-currency" className="trip-form__label">
@@ -258,9 +248,7 @@ export const TripForm: React.FC<TripFormProps> = ({
               </option>
             ))}
           </select>
-          {errors.currency && (
-            <p className="trip-form__error">{errors.currency.message}</p>
-          )}
+          {errors.currency && <p className="trip-form__error">{errors.currency.message}</p>}
         </div>
       </div>
 
@@ -305,9 +293,7 @@ export const TripForm: React.FC<TripFormProps> = ({
           placeholder="记录行程相关的备注信息..."
           disabled={isLoading}
         />
-        {errors.notes && (
-          <p className="trip-form__error">{errors.notes.message}</p>
-        )}
+        {errors.notes && <p className="trip-form__error">{errors.notes.message}</p>}
       </div>
 
       {/* 操作按钮 */}
@@ -315,7 +301,7 @@ export const TripForm: React.FC<TripFormProps> = ({
         <Button type="button" variant="secondary" onClick={onCancel} disabled={isSubmitting}>
           取消
         </Button>
-        <Button type="submit" disabled={isSubmitting || isLoading}>
+        <Button type="submit" disabled={isSubmitting || isLoading || !isValid}>
           {isSubmitting ? (
             <>
               <Spinner size="sm" />

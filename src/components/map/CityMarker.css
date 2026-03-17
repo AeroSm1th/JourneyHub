@@ -8,6 +8,13 @@
   border: none;
 }
 
+/* 外层容器，不旋转，用于定位角标 */
+.city-marker-wrapper {
+  position: relative;
+  width: 32px;
+  height: 40px;
+}
+
 /* 城市标记主体 */
 .city-marker {
   width: 32px;
@@ -26,6 +33,16 @@
 .city-marker svg {
   transform: rotate(45deg);
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+/* 收藏角标 - 在不旋转的 wrapper 上定位，保持正向 */
+.city-marker-fav {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  line-height: 0;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  pointer-events: none;
 }
 
 /* 悬停效果 */

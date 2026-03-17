@@ -54,7 +54,11 @@ const formatDate = (dateString: string): string => {
 /**
  * 根据开始和结束日期生成日程条目列表
  */
-function generateDayEntries(startDate: string, endDate: string, existingDays: TripDay[]): DayEntry[] {
+function generateDayEntries(
+  startDate: string,
+  endDate: string,
+  existingDays: TripDay[]
+): DayEntry[] {
   const start = new Date(startDate);
   const end = new Date(endDate);
   const entries: DayEntry[] = [];
@@ -100,10 +104,13 @@ export function TripDayEditor({ tripId, startDate, endDate }: TripDayEditorProps
   }, [startDate, endDate, days]);
 
   /** 开始编辑某个字段 */
-  const handleStartEdit = useCallback((dayIndex: number, field: 'title' | 'notes', currentValue: string) => {
-    setEditing({ dayIndex, field });
-    setEditValue(currentValue);
-  }, []);
+  const handleStartEdit = useCallback(
+    (dayIndex: number, field: 'title' | 'notes', currentValue: string) => {
+      setEditing({ dayIndex, field });
+      setEditValue(currentValue);
+    },
+    []
+  );
 
   /** 取消编辑 */
   const handleCancelEdit = useCallback(() => {
@@ -112,31 +119,34 @@ export function TripDayEditor({ tripId, startDate, endDate }: TripDayEditorProps
   }, []);
 
   /** 保存编辑 */
-  const handleSaveEdit = useCallback(async (entry: DayEntry) => {
-    if (!editing) return;
+  const handleSaveEdit = useCallback(
+    async (entry: DayEntry) => {
+      if (!editing) return;
 
-    const trimmedValue = editValue.trim();
+      const trimmedValue = editValue.trim();
 
-    if (entry.existing) {
-      // 更新已有日程
-      await updateDay.mutateAsync({
-        id: entry.existing.id,
-        tripId,
-        updates: { [editing.field]: trimmedValue || undefined },
-      });
-    } else {
-      // 创建新日程
-      await createDay.mutateAsync({
-        trip_id: tripId,
-        day_index: entry.dayIndex,
-        date: entry.date,
-        [editing.field]: trimmedValue || undefined,
-      });
-    }
+      if (entry.existing) {
+        // 更新已有日程
+        await updateDay.mutateAsync({
+          id: entry.existing.id,
+          tripId,
+          updates: { [editing.field]: trimmedValue || undefined },
+        });
+      } else {
+        // 创建新日程
+        await createDay.mutateAsync({
+          trip_id: tripId,
+          day_index: entry.dayIndex,
+          date: entry.date,
+          [editing.field]: trimmedValue || undefined,
+        });
+      }
 
-    setEditing(null);
-    setEditValue('');
-  }, [editing, editValue, tripId, updateDay, createDay]);
+      setEditing(null);
+      setEditValue('');
+    },
+    [editing, editValue, tripId, updateDay, createDay]
+  );
 
   // 加载状态
   if (isLoading) {
@@ -213,7 +223,12 @@ export function TripDayEditor({ tripId, startDate, endDate }: TripDayEditorProps
                       <Button size="sm" onClick={() => handleSaveEdit(entry)} loading={isSaving}>
                         保存
                       </Button>
-                      <Button size="sm" variant="ghost" onClick={handleCancelEdit} disabled={isSaving}>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={handleCancelEdit}
+                        disabled={isSaving}
+                      >
                         取消
                       </Button>
                     </div>
@@ -250,7 +265,12 @@ export function TripDayEditor({ tripId, startDate, endDate }: TripDayEditorProps
                       <Button size="sm" onClick={() => handleSaveEdit(entry)} loading={isSaving}>
                         保存
                       </Button>
-                      <Button size="sm" variant="ghost" onClick={handleCancelEdit} disabled={isSaving}>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={handleCancelEdit}
+                        disabled={isSaving}
+                      >
                         取消
                       </Button>
                     </div>

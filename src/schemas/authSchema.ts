@@ -11,7 +11,7 @@ import { z } from 'zod';
  */
 const emailSchema = z
   .string({
-    required_error: '邮箱不能为空',
+    error: '邮箱不能为空',
   })
   .min(1, '邮箱不能为空')
   .trim()
@@ -25,7 +25,7 @@ const emailSchema = z
  */
 const passwordSchema = z
   .string({
-    required_error: '密码不能为空',
+    error: '密码不能为空',
   })
   .min(8, '密码至少需要 8 个字符')
   .max(128, '密码不能超过 128 个字符');
@@ -36,7 +36,7 @@ const passwordSchema = z
  */
 const strongPasswordSchema = z
   .string({
-    required_error: '密码不能为空',
+    error: '密码不能为空',
   })
   .min(8, '密码至少需要 8 个字符')
   .max(128, '密码不能超过 128 个字符')
@@ -61,7 +61,7 @@ export const registerSchema = z
     email: emailSchema,
     password: passwordSchema,
     confirmPassword: z.string({
-      required_error: '请确认密码',
+      error: '请确认密码',
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -77,7 +77,7 @@ export const registerWithStrongPasswordSchema = z
     email: emailSchema,
     password: strongPasswordSchema,
     confirmPassword: z.string({
-      required_error: '请确认密码',
+      error: '请确认密码',
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -99,7 +99,7 @@ export const resetPasswordSchema = z
   .object({
     password: passwordSchema,
     confirmPassword: z.string({
-      required_error: '请确认密码',
+      error: '请确认密码',
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -113,11 +113,11 @@ export const resetPasswordSchema = z
 export const changePasswordSchema = z
   .object({
     currentPassword: z.string({
-      required_error: '请输入当前密码',
+      error: '请输入当前密码',
     }),
     newPassword: passwordSchema,
     confirmNewPassword: z.string({
-      required_error: '请确认新密码',
+      error: '请确认新密码',
     }),
   })
   .refine((data) => data.newPassword === data.confirmNewPassword, {
@@ -157,7 +157,7 @@ export const emailVerificationSchema = z.object({
   email: emailSchema,
   code: z
     .string({
-      required_error: '验证码不能为空',
+      error: '验证码不能为空',
     })
     .length(6, '验证码必须是 6 位数字')
     .regex(/^\d{6}$/, '验证码必须是 6 位数字'),

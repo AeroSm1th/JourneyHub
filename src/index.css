@@ -44,36 +44,46 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: inherit;
+  box-sizing: border-box;
 }
 
 html {
-  font-size: 62.5%;
+  font-size: 100%;
   box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
   font-family: 'Manrope', sans-serif;
-  color: var(--color-light--2);
+  color: #1f2937;
   font-weight: 400;
   line-height: 1.6;
+  height: 100%;
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
+  overflow: hidden;
 }
 
 label {
-  font-size: 1.6rem;
+  font-size: 0.875rem;
   font-weight: 600;
+  color: #374151;
 }
 
 input,
-textarea {
-  width: 100%;
-  padding: 0.8rem 1.2rem;
+textarea,
+select {
   font-family: inherit;
-  font-size: 1.6rem;
-  border: none;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
   border-radius: 5px;
-  background-color: var(--color-light--3);
+  background-color: #fff;
   transition: all 0.2s;
+  color: #1f2937;
 }
 
 input:focus {
@@ -88,9 +98,9 @@ input:focus {
   color: var(--color-dark--1);
   text-transform: uppercase;
   text-decoration: none;
-  font-size: 1.6rem;
+  font-size: 1rem;
   font-weight: 600;
-  padding: 1rem 3rem;
+  padding: 0.625rem 1.875rem;
   border-radius: 5px;
 }
 

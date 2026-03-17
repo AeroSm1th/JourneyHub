@@ -14,7 +14,6 @@
 import { useState, useRef, ChangeEvent } from 'react';
 import { supabase } from '@/services/supabase/client';
 import { Button } from '@/components/common/Button';
-import { Spinner } from '@/components/common/Spinner';
 import './ImageUpload.css';
 
 interface ImageUploadProps {
@@ -93,6 +92,7 @@ export function ImageUpload({
   const [previewUrl, setPreviewUrl] = useState<string | null>(currentImageUrl || null);
   const [error, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadFailed, setUploadFailed] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   /**
@@ -143,13 +143,35 @@ export function ImageUpload({
 
   /**
    * 上传文件到 Supabase Storage
+   * 支持失败后重试
    */
   const handleUpload = async () => {
     if (!selectedFile) return;
 
+    // 上传前再次验证文件（防止文件在选择后被修改）
+    const validationError = validateFile(selectedFile);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     setUploading(true);
     setUploadProgress(0);
+    setUploadFailed(false);
     setError(null);
+
+    // 模拟上传进度（Supabase JS SDK 不提供实时进度回调）
+    const progressInterval = setInterval(() => {
+      setUploadProgress((prev) => {
+        if (prev >= 90) {
+          clearInterval(progressInterval);
+          return 90;
+        }
+        // 根据文件大小调整进度速度，大文件进度更慢
+        const increment = selectedFile.size > 2 * 1024 * 1024 ? 5 : 10;
+        return Math.min(prev + increment, 90);
+      });
+    }, 200);
 
     try {
       // 生成唯一文件名
@@ -167,7 +189,7 @@ export function ImageUpload({
 
       if (uploadError) throw uploadError;
 
-      // 模拟上传进度（Supabase 不提供实时进度）
+      clearInterval(progressInterval);
       setUploadProgress(100);
 
       // 获取公开 URL
@@ -184,14 +206,16 @@ export function ImageUpload({
         fileInputRef.current.value = '';
       }
     } catch (err) {
+      clearInterval(progressInterval);
       const error = err as Error;
       setError(error.message || '上传失败，请重试');
+      setUploadFailed(true);
+      setUploadProgress(0);
       if (onUploadError) {
         onUploadError(error);
       }
     } finally {
       setUploading(false);
-      setUploadProgress(0);
     }
   };
 
@@ -289,7 +313,7 @@ export function ImageUpload({
             onClick={handleUpload}
             disabled={disabled}
           >
-            上传
+            {uploadFailed ? '重试上传' : '上传'}
           </Button>
         </div>
       )}
@@ -297,13 +321,33 @@ export function ImageUpload({
       {/* 上传进度 */}
       {uploading && (
         <div className="image-upload-progress">
-          <Spinner size="sm" />
+          <div className="image-upload-progress-bar-track">
+            <div
+              className="image-upload-progress-bar-fill"
+              style={{ width: `${uploadProgress}%` }}
+            />
+          </div>
           <p className="image-upload-progress-text">上传中... {uploadProgress}%</p>
         </div>
       )}
 
-      {/* 错误消息 */}
-      {error && <p className="image-upload-error">{error}</p>}
+      {/* 错误消息及重试 */}
+      {error && (
+        <div className="image-upload-error-container">
+          <p className="image-upload-error">{error}</p>
+          {uploadFailed && selectedFile && (
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={handleUpload}
+              disabled={disabled || uploading}
+            >
+              重试
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

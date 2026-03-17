@@ -18,6 +18,22 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      // 高德地图 API 代理
+      '/amap-api': {
+        target: 'https://restapi.amap.com',
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/amap-api/, ''),
+      },
+      // Nominatim API 代理
+      '/nominatim-api': {
+        target: 'https://nominatim.openstreetmap.org',
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/nominatim-api/, ''),
+      },
+    },
+  },
   test: {
     globals: true,
     environment: "jsdom",

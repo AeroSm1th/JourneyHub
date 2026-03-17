@@ -8,6 +8,7 @@
 import { supabase } from '@/services/supabase/client';
 import type { City, CityInsert } from '@/types/database';
 import type { CitySearchParams } from '@/types/entities';
+import { extractStoragePath } from '@/utils/storage';
 
 /**
  * 获取当前用户的所有城市记录
@@ -103,16 +104,31 @@ export const update = async (id: string, updates: Partial<CityInsert>): Promise<
 
 /**
  * 删除城市记录
+ * 同时清理 Storage 中的封面图片
  *
  * @param id - 城市记录 ID
  * @returns Promise<void>
  * @throws Error 如果删除失败
  */
 export const deleteCity = async (id: string): Promise<void> => {
-  const { error } = await supabase.from('cities').delete().eq('id', id);
+  // 先获取城市记录，拿到 cover_image URL
+  const { data: city } = await supabase.from('cities').select('cover_image').eq('id', id).single();
 
+  // 删除数据库记录
+  const { error } = await supabase.from('cities').delete().eq('id', id);
   if (error) {
     throw new Error(`删除城市记录失败: ${error.message}`);
+  }
+
+  // 清理 Storage 中的封面图片（不阻塞，失败仅打印日志）
+  if (city?.cover_image) {
+    const filePath = extractStoragePath(city.cover_image, 'city-images');
+    if (filePath) {
+      const { error: storageError } = await supabase.storage.from('city-images').remove([filePath]);
+      if (storageError) {
+        console.error('[citiesApi] 清理封面图片失败:', storageError.message);
+      }
+    }
   }
 };
 
@@ -257,16 +273,34 @@ export const toggleFavorite = async (id: string, isFavorite: boolean): Promise<C
 
 /**
  * 批量删除城市记录
+ * 同时清理 Storage 中的封面图片
  *
  * @param ids - 城市记录 ID 数组
  * @returns Promise<void>
  * @throws Error 如果删除失败
  */
 export const batchDelete = async (ids: string[]): Promise<void> => {
-  const { error } = await supabase.from('cities').delete().in('id', ids);
+  // 先获取所有城市的封面图片 URL
+  const { data: cities } = await supabase.from('cities').select('cover_image').in('id', ids);
 
+  // 删除数据库记录
+  const { error } = await supabase.from('cities').delete().in('id', ids);
   if (error) {
     throw new Error(`批量删除城市记录失败: ${error.message}`);
+  }
+
+  // 清理 Storage 中的封面图片
+  if (cities && cities.length > 0) {
+    const filePaths = cities
+      .map((c) => (c.cover_image ? extractStoragePath(c.cover_image, 'city-images') : null))
+      .filter((p): p is string => p !== null);
+
+    if (filePaths.length > 0) {
+      const { error: storageError } = await supabase.storage.from('city-images').remove(filePaths);
+      if (storageError) {
+        console.error('[citiesApi] 批量清理封面图片失败:', storageError.message);
+      }
+    }
   }
 };
 

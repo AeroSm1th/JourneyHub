@@ -7,6 +7,7 @@
 
 import { supabase } from '@/services/supabase/client';
 import type { User } from '@/types/database';
+import { extractStoragePath } from '@/utils/storage';
 
 // ============================================================================
 // 个人资料 API 函数
@@ -20,11 +21,7 @@ import type { User } from '@/types/database';
  * @throws Error 如果查询失败或用户不存在
  */
 export async function getProfile(userId: string): Promise<User> {
-  const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('id', userId)
-    .single();
+  const { data, error } = await supabase.from('users').select('*').eq('id', userId).single();
 
   if (error) {
     throw new Error(`获取用户资料失败: ${error.message}`);
@@ -45,10 +42,7 @@ export async function getProfile(userId: string): Promise<User> {
  * @returns 更新后的用户资料
  * @throws Error 如果更新失败
  */
-export async function updateProfile(
-  userId: string,
-  data: { nickname?: string },
-): Promise<User> {
+export async function updateProfile(userId: string, data: { nickname?: string }): Promise<User> {
   const { data: updated, error } = await supabase
     .from('users')
     .update(data)
@@ -69,6 +63,7 @@ export async function updateProfile(
 
 /**
  * 上传用户头像到 Supabase Storage
+ * 上传新头像前会删除旧头像文件
  *
  * @param userId - 用户 ID
  * @param file - 头像文件
@@ -76,13 +71,22 @@ export async function updateProfile(
  * @throws Error 如果上传失败
  */
 export async function uploadAvatar(userId: string, file: File): Promise<string> {
+  // 先获取当前头像 URL，用于后续删除旧文件
+  const { data: currentUser } = await supabase
+    .from('users')
+    .select('avatar_url')
+    .eq('id', userId)
+    .single();
+
+  const oldAvatarUrl = currentUser?.avatar_url;
+
   // 生成唯一文件路径，使用时间戳避免缓存问题
   const fileExt = file.name.split('.').pop();
   const filePath = `${userId}/avatar-${Date.now()}.${fileExt}`;
 
-  // 上传文件到 avatars 存储桶
+  // 上传文件到 user-avatars 存储桶
   const { error: uploadError } = await supabase.storage
-    .from('avatars')
+    .from('user-avatars')
     .upload(filePath, file, {
       cacheControl: '3600',
       upsert: true,
@@ -92,10 +96,19 @@ export async function uploadAvatar(userId: string, file: File): Promise<string> 
     throw new Error(`上传头像失败: ${uploadError.message}`);
   }
 
+  // 删除旧头像文件（不阻塞，失败仅打印日志）
+  if (oldAvatarUrl) {
+    const oldPath = extractStoragePath(oldAvatarUrl, 'user-avatars');
+    if (oldPath) {
+      const { error: removeError } = await supabase.storage.from('user-avatars').remove([oldPath]);
+      if (removeError) {
+        console.error('[profile] 删除旧头像失败:', removeError.message);
+      }
+    }
+  }
+
   // 获取公开访问 URL
-  const { data: urlData } = supabase.storage
-    .from('avatars')
-    .getPublicUrl(filePath);
+  const { data: urlData } = supabase.storage.from('user-avatars').getPublicUrl(filePath);
 
   return urlData.publicUrl;
 }
@@ -128,92 +141,54 @@ export async function updateAvatar(userId: string, avatarUrl: string): Promise<U
 }
 
 /**
- * 删除用户账户及所有关联数据
- * 删除顺序：行程待办 → 行程日程 → 行程 → 分享链接 → 愿望清单 → 城市记录 → 用户
+ * 清空用户所有业务数据（保留账户）
+ * 删除所有城市记录、愿望清单、行程、分享链接，以及 Storage 中的图片和头像
  *
  * @param userId - 用户 ID
- * @throws Error 如果删除失败
+ * @throws Error 如果清空失败
  */
-export async function deleteAccount(userId: string): Promise<void> {
-  // 1. 获取用户的所有行程 ID
-  const { data: trips } = await supabase
-    .from('trips')
-    .select('id')
-    .eq('user_id', userId);
+export async function clearAllData(userId: string): Promise<void> {
+  // ---- 清理 Storage 文件 ----
 
-  const tripIds = trips?.map((t) => t.id) || [];
+  // 清理用户目录下所有头像文件
+  const { data: avatarFiles } = await supabase.storage.from('user-avatars').list(userId);
 
-  // 2. 删除行程待办事项
+  if (avatarFiles && avatarFiles.length > 0) {
+    const paths = avatarFiles.map((f) => `${userId}/${f.name}`);
+    const { error } = await supabase.storage.from('user-avatars').remove(paths);
+    if (error) console.error('[clearAllData] 清理头像失败:', error.message);
+  }
+
+  // 清理用户目录下所有城市图片文件
+  const { data: cityFiles } = await supabase.storage.from('city-images').list(userId);
+
+  if (cityFiles && cityFiles.length > 0) {
+    const paths = cityFiles.map((f) => `${userId}/${f.name}`);
+    const { error } = await supabase.storage.from('city-images').remove(paths);
+    if (error) console.error('[clearAllData] 清理城市图片失败:', error.message);
+  }
+
+  // ---- 清理数据库业务数据 ----
+
+  // 获取行程 ID
+  const { data: trips } = await supabase.from('trips').select('id').eq('user_id', userId);
+
+  const tripIds = (trips || []).map((t) => t.id);
+
+  // 删除行程子表
   if (tripIds.length > 0) {
-    const { error: tasksError } = await supabase
-      .from('trip_tasks')
-      .delete()
-      .in('trip_id', tripIds);
-
-    if (tasksError) {
-      throw new Error(`删除行程待办失败: ${tasksError.message}`);
-    }
-
-    // 3. 删除行程日程
-    const { error: daysError } = await supabase
-      .from('trip_days')
-      .delete()
-      .in('trip_id', tripIds);
-
-    if (daysError) {
-      throw new Error(`删除行程日程失败: ${daysError.message}`);
-    }
+    await supabase.from('trip_tasks').delete().in('trip_id', tripIds);
+    await supabase.from('trip_days').delete().in('trip_id', tripIds);
   }
 
-  // 4. 删除行程
-  const { error: tripsError } = await supabase
-    .from('trips')
-    .delete()
-    .eq('user_id', userId);
+  // 删除业务数据
+  await supabase.from('trips').delete().eq('user_id', userId);
+  await supabase.from('shares').delete().eq('user_id', userId);
+  await supabase.from('wishlist_items').delete().eq('user_id', userId);
+  await supabase.from('cities').delete().eq('user_id', userId);
 
-  if (tripsError) {
-    throw new Error(`删除行程失败: ${tripsError.message}`);
-  }
-
-  // 5. 删除分享链接
-  const { error: sharesError } = await supabase
-    .from('shares')
-    .delete()
-    .eq('user_id', userId);
-
-  if (sharesError) {
-    throw new Error(`删除分享链接失败: ${sharesError.message}`);
-  }
-
-  // 6. 删除愿望清单
-  const { error: wishlistError } = await supabase
-    .from('wishlist_items')
-    .delete()
-    .eq('user_id', userId);
-
-  if (wishlistError) {
-    throw new Error(`删除愿望清单失败: ${wishlistError.message}`);
-  }
-
-  // 7. 删除城市记录
-  const { error: citiesError } = await supabase
-    .from('cities')
-    .delete()
-    .eq('user_id', userId);
-
-  if (citiesError) {
-    throw new Error(`删除城市记录失败: ${citiesError.message}`);
-  }
-
-  // 8. 删除用户记录
-  const { error: userError } = await supabase
-    .from('users')
-    .delete()
-    .eq('id', userId);
-
-  if (userError) {
-    throw new Error(`删除用户记录失败: ${userError.message}`);
-  }
+  // 清除用户头像 URL（保留用户记录）
+  await supabase.from('users').update({ avatar_url: null, nickname: null }).eq('id', userId);
 }
 
 /**

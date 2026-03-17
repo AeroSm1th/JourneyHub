@@ -15,20 +15,18 @@ export const tripFormSchema = z
     // 必填字段
     title: z
       .string({
-        required_error: '行程名称不能为空',
+        error: '行程名称不能为空',
       })
       .min(1, '行程名称不能为空')
       .max(200, '行程名称不能超过 200 个字符')
       .trim(),
 
     startDate: z.date({
-      required_error: '开始日期不能为空',
-      invalid_type_error: '开始日期格式不正确',
+      error: '开始日期不能为空',
     }),
 
     endDate: z.date({
-      required_error: '结束日期不能为空',
-      invalid_type_error: '结束日期格式不正确',
+      error: '结束日期不能为空',
     }),
 
     // 可选字段
@@ -38,7 +36,7 @@ export const tripFormSchema = z
 
     budget: z
       .number({
-        invalid_type_error: '预算必须是数字',
+        error: '预算必须是数字',
       })
       .positive('预算必须大于 0')
       .max(999999999.99, '预算金额过大')
@@ -119,15 +117,13 @@ export const tripUpdateSchema = z
 export const tripDayFormSchema = z.object({
   dayIndex: z
     .number({
-      required_error: '日程索引不能为空',
-      invalid_type_error: '日程索引必须是数字',
+      error: '日程索引不能为空',
     })
     .int('日程索引必须是整数')
     .min(1, '日程索引必须从 1 开始'),
 
   date: z.date({
-    required_error: '日期不能为空',
-    invalid_type_error: '日期格式不正确',
+    error: '日期不能为空',
   }),
 
   title: z.string().max(200, '标题不能超过 200 个字符').trim().optional(),
@@ -148,7 +144,7 @@ export const tripTaskFormSchema = z.object({
 
   content: z
     .string({
-      required_error: '待办事项内容不能为空',
+      error: '待办事项内容不能为空',
     })
     .min(1, '待办事项内容不能为空')
     .max(500, '待办事项内容不能超过 500 个字符')
@@ -199,7 +195,7 @@ export const tripFilterSchema = z
 export const createShareSchema = z
   .object({
     type: z.enum(['all', 'trip'] as const, {
-      errorMap: () => ({ message: '请选择有效的分享类型' }),
+      error: '请选择有效的分享类型',
     }),
 
     relatedTripId: z.string().uuid('行程 ID 格式不正确').optional(),

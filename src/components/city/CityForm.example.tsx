@@ -113,7 +113,9 @@ export function LoadingStateExample() {
       <CityForm
         coordinates={{ lat: 39.9042, lng: 116.4074 }}
         isLoading={isLoading}
-        onSubmit={async () => { /* noop */ }}
+        onSubmit={async () => {
+          /* noop */
+        }}
         onCancel={() => console.log('取消')}
       />
     </div>

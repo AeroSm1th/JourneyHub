@@ -26,36 +26,23 @@ export const cityFormSchema = z.object({
       Continent.Oceania,
       Continent.Antarctica,
     ] as const,
-    {
-      errorMap: () => ({ message: '请选择有效的大洲' }),
-    }
+    { message: '请选择有效的大洲' }
   ),
 
   latitude: z
-    .number({
-      required_error: '纬度不能为空',
-      invalid_type_error: '纬度必须是数字',
-    })
+    .number({ error: '纬度必须是数字' })
     .min(-90, '纬度必须在 -90 到 90 之间')
     .max(90, '纬度必须在 -90 到 90 之间'),
 
   longitude: z
-    .number({
-      required_error: '经度不能为空',
-      invalid_type_error: '经度必须是数字',
-    })
+    .number({ error: '经度必须是数字' })
     .min(-180, '经度必须在 -180 到 180 之间')
     .max(180, '经度必须在 -180 到 180 之间'),
 
-  visitedAt: z
-    .date({
-      required_error: '访问日期不能为空',
-      invalid_type_error: '访问日期格式不正确',
-    })
-    .max(new Date(), '访问日期不能是未来日期'),
+  visitedAt: z.date({ error: '访问日期格式不正确' }).max(new Date(), '访问日期不能是未来日期'),
 
   tripType: z.enum([TripType.Leisure, TripType.Business, TripType.Transit] as const, {
-    errorMap: () => ({ message: '请选择有效的旅行类型' }),
+    message: '请选择有效的旅行类型',
   }),
 
   // 可选字段
@@ -75,10 +62,7 @@ export const cityFormSchema = z.object({
 
   coverImage: z
     .any()
-    .refine(
-      (val) => val === undefined || val === null || val instanceof File,
-      '封面图片格式不正确'
-    )
+    .refine((val) => val === undefined || val === null || val instanceof File, '封面图片格式不正确')
     .refine(
       (val) => !val || !(val instanceof File) || val.size <= 5 * 1024 * 1024,
       '图片大小不能超过 5MB'
@@ -110,8 +94,8 @@ export const citySearchSchema = z.object({
   tripType: z.enum([TripType.Leisure, TripType.Business, TripType.Transit] as const).optional(),
   rating: z.number().int().min(1).max(5).optional(),
   tags: z.array(z.string()).optional(),
-  startDate: z.string().datetime().optional(),
-  endDate: z.string().datetime().optional(),
+  startDate: z.iso.datetime().optional(),
+  endDate: z.iso.datetime().optional(),
   isFavorite: z.boolean().optional(),
 });
 
@@ -133,24 +117,16 @@ export const wishlistFormSchema = z.object({
       Continent.Oceania,
       Continent.Antarctica,
     ] as const,
-    {
-      errorMap: () => ({ message: '请选择有效的大洲' }),
-    }
+    { message: '请选择有效的大洲' }
   ),
 
   latitude: z
-    .number({
-      required_error: '纬度不能为空',
-      invalid_type_error: '纬度必须是数字',
-    })
+    .number({ error: '纬度必须是数字' })
     .min(-90, '纬度必须在 -90 到 90 之间')
     .max(90, '纬度必须在 -90 到 90 之间'),
 
   longitude: z
-    .number({
-      required_error: '经度不能为空',
-      invalid_type_error: '经度必须是数字',
-    })
+    .number({ error: '经度必须是数字' })
     .min(-180, '经度必须在 -180 到 180 之间')
     .max(180, '经度必须在 -180 到 180 之间'),
 
@@ -166,9 +142,9 @@ export const wishlistFormSchema = z.object({
     (val) => (val === '' ? undefined : val),
     z
       .enum(['spring', 'summer', 'autumn', 'winter'] as const, {
-        errorMap: () => ({ message: '请选择有效的季节' }),
+        message: '请选择有效的季节',
       })
-      .optional(),
+      .optional()
   ),
 
   notes: z.string().max(2000, '备注不能超过 2000 个字符').trim().optional(),

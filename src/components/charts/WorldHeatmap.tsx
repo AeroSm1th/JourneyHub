@@ -10,11 +10,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import * as echarts from 'echarts/core';
 import { EChartsWrapper } from './EChartsWrapper';
+import { Spinner } from '@/components/common/Spinner';
 
 import type { EChartsOption } from 'echarts';
 
-/** 世界地图 GeoJSON 数据源地址 */
-const WORLD_MAP_JSON_URL = 'https://echarts.apache.org/examples/data/asset/geo/world.json';
+/** 世界地图 GeoJSON 数据源地址（本地文件，避免 CORS 问题） */
+const WORLD_MAP_JSON_URL = '/world.json';
 
 /** 地图注册名称 */
 const MAP_NAME = 'world';
@@ -174,12 +175,17 @@ export function WorldHeatmap({
     );
   }
 
-  return (
-    <EChartsWrapper
-      option={option}
-      height={height}
-      loading={loading || !mapReady}
-      className={className}
-    />
-  );
+  // 地图 GeoJSON 未注册前不渲染 ECharts，避免 "Map world not exists" 错误
+  if (!mapReady) {
+    return (
+      <div
+        className={`echarts-wrapper ${className ?? ''}`}
+        style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
+        <Spinner size="md" centered />
+      </div>
+    );
+  }
+
+  return <EChartsWrapper option={option} height={height} loading={loading} className={className} />;
 }
