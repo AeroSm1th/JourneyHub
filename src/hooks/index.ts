@@ -6,7 +6,6 @@
 
 export { useMapClick } from './useMapClick';
 export { useMapState } from './useMapState';
-export { useUrlPosition } from './useUrlPosition';
 export { useGeolocation } from './useGeolocation';
 
 // 导出类型

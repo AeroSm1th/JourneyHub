@@ -1,18 +1,18 @@
-.nav {
+.page-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.nav ul {
+.page-nav ul {
   list-style: none;
   display: flex;
   align-items: center;
   gap: 4rem;
 }
 
-.nav a:link,
-.nav a:visited {
+.page-nav a:link,
+.page-nav a:visited {
   text-decoration: none;
   color: var(--color-light--2);
   text-transform: uppercase;
@@ -20,13 +20,12 @@
   font-weight: 600;
 }
 
-/* CSS Modules feature */
-.nav a:global(.active) {
+.page-nav a.active {
   color: var(--color-brand--2);
 }
 
-a.ctaLink:link,
-a.ctaLink:visited {
+a.cta-link:link,
+a.cta-link:visited {
   background-color: var(--color-brand--2);
   color: var(--color-dark--0);
   padding: 0.8rem 2rem;

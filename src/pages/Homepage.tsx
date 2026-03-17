@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
-import PageNav from '../components/PageNav';
-import styles from './Homepage.module.css';
+import PageNav from '@/components/PageNav';
+import './Homepage.css';
 
 export default function Homepage() {
   const user = useAuthStore((s) => s.user);
 
   return (
-    <main className={styles.homepage}>
+    <main className="homepage">
       <PageNav />
 
       <section>
