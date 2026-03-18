@@ -30,6 +30,12 @@ interface AuthState {
   session: Session | null;
 
   /**
+   * 认证初始化是否完成
+   * false 表示还在检查会话状态，显示 loading
+   */
+  initialized: boolean;
+
+  /**
    * 设置认证状态
    * @param user - 用户信息
    * @param session - 会话信息
@@ -41,6 +47,11 @@ interface AuthState {
    * 用于退出登录时清除所有认证信息
    */
   clearAuth: () => void;
+
+  /**
+   * 标记初始化完成
+   */
+  setInitialized: () => void;
 }
 
 /**
@@ -60,8 +71,11 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   session: null,
+  initialized: false,
 
   setAuth: (user, session) => set({ user, session }),
 
   clearAuth: () => set({ user: null, session: null }),
+
+  setInitialized: () => set({ initialized: true }),
 }));
