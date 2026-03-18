@@ -10,7 +10,6 @@
 import { useCities } from '@/features/cities/hooks/useCities';
 import { Spinner } from '@/components/common/Spinner';
 import { VirtualList } from '@/components/common/VirtualList';
-import { usePrefetchCity } from '@/hooks/usePrefetch';
 import { City } from '@/types/database';
 import './CityList.css';
 
@@ -44,19 +43,13 @@ function CityListItem({
   city,
   isSelected,
   onClick,
-  onMouseEnter,
 }: {
   city: City;
   isSelected: boolean;
   onClick: () => void;
-  onMouseEnter?: () => void;
 }) {
   return (
-    <li
-      className={`city-list-item ${isSelected ? 'city-list-item-active' : ''}`}
-      onClick={onClick}
-      onMouseEnter={onMouseEnter}
-    >
+    <li className={`city-list-item ${isSelected ? 'city-list-item-active' : ''}`} onClick={onClick}>
       <div className="city-list-item-content">
         <div className="city-list-item-header">
           <h3 className="city-list-item-name">{city.city_name}</h3>
@@ -110,8 +103,6 @@ function CityListItem({
  */
 export function CityList({ onCityClick, selectedCityId }: CityListProps) {
   const { data: cities, isLoading, error } = useCities();
-  // hover 时预取城市详情，点击后无需等待
-  const prefetchCity = usePrefetchCity();
 
   // 加载状态
   if (isLoading) {
@@ -158,7 +149,7 @@ export function CityList({ onCityClick, selectedCityId }: CityListProps) {
       </div>
 
       {useVirtual ? (
-        <VirtualList<City>
+        <VirtualList
           items={sortedCities}
           estimateSize={100}
           overscan={5}
@@ -169,7 +160,6 @@ export function CityList({ onCityClick, selectedCityId }: CityListProps) {
               city={city}
               isSelected={selectedCityId === city.id}
               onClick={() => onCityClick?.(city)}
-              onMouseEnter={() => prefetchCity(city.id)}
             />
           )}
         />
@@ -181,7 +171,6 @@ export function CityList({ onCityClick, selectedCityId }: CityListProps) {
               city={city}
               isSelected={selectedCityId === city.id}
               onClick={() => onCityClick?.(city)}
-              onMouseEnter={() => prefetchCity(city.id)}
             />
           ))}
         </ul>

@@ -27,7 +27,7 @@ export const useCreateTripDay = () => {
         return [...oldDays, newDay].sort((a, b) => a.day_index - b.day_index);
       });
       // 使行程详情缓存失效以刷新关联数据
-      queryClient.invalidateQueries({ queryKey: tripQueryKey(newDay.trip_id), refetchType: 'all' });
+      queryClient.invalidateQueries({ queryKey: tripQueryKey(newDay.trip_id) });
     },
   });
 };

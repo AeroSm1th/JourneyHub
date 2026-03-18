@@ -10,4 +10,3 @@ export { Modal } from './Modal';
 export { Spinner } from './Spinner';
 export { ErrorBoundary } from './ErrorBoundary';
 export { ToastContainer } from './Toast';
-export { PageLoader } from './PageLoader';

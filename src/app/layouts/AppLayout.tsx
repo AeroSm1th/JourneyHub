@@ -10,7 +10,6 @@ import { Map, MapPin, Heart, Plane, BarChart3, UserCircle, Menu } from 'lucide-r
 import { useUIStore } from '@/store/uiStore';
 import Sidebar from '@/components/Sidebar';
 import User from '@/components/User';
-import { usePrefetchCoreData } from '@/hooks/usePrefetch';
 import './AppLayout.css';
 
 /**
@@ -22,9 +21,6 @@ import './AppLayout.css';
  */
 export function AppLayout() {
   const { sidebarOpen, toggleSidebar } = useUIStore();
-
-  // 布局挂载时预取核心数据，减少首次进入各页面的等待时间
-  usePrefetchCoreData();
 
   return (
     <div className="app-layout">

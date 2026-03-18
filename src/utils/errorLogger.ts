@@ -153,12 +153,5 @@ export function isAuthError(error: unknown): boolean {
   const code = extractErrorCode(error);
   if (code === '401' || code === 'PGRST301') return true;
   const msg = extractMessage(error).toLowerCase();
-  return (
-    msg.includes('jwt expired') ||
-    msg.includes('not authenticated') ||
-    msg.includes('invalid token') ||
-    msg.includes('invalid refresh token') ||
-    msg.includes('refresh token not found') ||
-    msg.includes('token has expired')
-  );
+  return msg.includes('jwt expired') || msg.includes('not authenticated') || msg.includes('invalid token');
 }

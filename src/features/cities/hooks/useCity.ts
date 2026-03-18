@@ -2,7 +2,6 @@
  * useCity Hook
  *
  * 获取单个城市记录的查询 Hook
- * 验证需求: 11.2, 11.3 - 缓存服务器数据，未过期时直接使用缓存
  */
 
 import { useQuery } from '@tanstack/react-query';
@@ -38,7 +37,7 @@ export const useCity = (id: string, options?: { enabled?: boolean }) => {
     queryKey: cityQueryKey(id),
     queryFn: () => citiesApi.getById(id),
     enabled: options?.enabled ?? !!id,
-    staleTime: 5 * 60 * 1000,  // 5 分钟内数据视为新鲜，未过期时直接使用缓存（需求 11.3）
-    cacheTime: 10 * 60 * 1000, // 10 分钟后清除缓存
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 };
