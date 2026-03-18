@@ -32,7 +32,7 @@ export const useDeleteTripDay = () => {
         return oldDays.filter((day) => day.id !== variables.id);
       });
       // 使行程详情缓存失效
-      queryClient.invalidateQueries({ queryKey: tripQueryKey(variables.tripId) });
+      queryClient.invalidateQueries({ queryKey: tripQueryKey(variables.tripId), refetchType: 'all' });
     },
   });
 };

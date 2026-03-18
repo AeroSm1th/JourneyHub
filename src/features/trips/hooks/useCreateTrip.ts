@@ -47,7 +47,7 @@ export const useCreateTrip = () => {
       });
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: TRIPS_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: TRIPS_QUERY_KEY, refetchType: 'all' });
     },
   });
 };

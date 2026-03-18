@@ -69,9 +69,8 @@ export const useUpdateCity = () => {
       });
     },
     onSettled: (_data, _error, { id }) => {
-      // 最终同步缓存
-      queryClient.invalidateQueries({ queryKey: CITIES_QUERY_KEY });
-      queryClient.invalidateQueries({ queryKey: cityQueryKey(id) });
+      queryClient.invalidateQueries({ queryKey: CITIES_QUERY_KEY, refetchType: 'all' });
+      queryClient.invalidateQueries({ queryKey: cityQueryKey(id), refetchType: 'all' });
     },
   });
 };

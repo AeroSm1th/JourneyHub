@@ -43,8 +43,8 @@ export const useDeleteTrip = () => {
       queryClient.removeQueries({ queryKey: tripQueryKey(deletedTripId) });
     },
     onSettled: () => {
-      // 最终同步列表缓存
-      queryClient.invalidateQueries({ queryKey: TRIPS_QUERY_KEY });
+      // 最终同步列表缓存，refetchType: 'all' 确保即使 refetchOnMount: false 也会重新请求
+      queryClient.invalidateQueries({ queryKey: TRIPS_QUERY_KEY, refetchType: 'all' });
     },
   });
 };

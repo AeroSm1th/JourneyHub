@@ -68,8 +68,8 @@ export const useUpdateWishlistItem = () => {
       });
     },
     onSettled: (_data, _error, { id }) => {
-      queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEY });
-      queryClient.invalidateQueries({ queryKey: wishlistItemQueryKey(id) });
+      queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEY, refetchType: 'all' });
+      queryClient.invalidateQueries({ queryKey: wishlistItemQueryKey(id), refetchType: 'all' });
     },
   });
 };

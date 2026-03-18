@@ -43,8 +43,8 @@ export const useDeleteCity = () => {
       queryClient.removeQueries({ queryKey: cityQueryKey(deletedCityId) });
     },
     onSettled: () => {
-      // 最终同步列表缓存
-      queryClient.invalidateQueries({ queryKey: CITIES_QUERY_KEY });
+      // 最终同步列表缓存，refetchType: 'all' 确保即使 refetchOnMount: false 也会重新请求
+      queryClient.invalidateQueries({ queryKey: CITIES_QUERY_KEY, refetchType: 'all' });
     },
   });
 };

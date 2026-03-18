@@ -69,8 +69,8 @@ export const useUpdateTrip = () => {
       });
     },
     onSettled: (_data, _error, { id }) => {
-      queryClient.invalidateQueries({ queryKey: TRIPS_QUERY_KEY });
-      queryClient.invalidateQueries({ queryKey: tripQueryKey(id) });
+      queryClient.invalidateQueries({ queryKey: TRIPS_QUERY_KEY, refetchType: 'all' });
+      queryClient.invalidateQueries({ queryKey: tripQueryKey(id), refetchType: 'all' });
     },
   });
 };

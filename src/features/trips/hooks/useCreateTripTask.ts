@@ -27,7 +27,7 @@ export const useCreateTripTask = () => {
         return [...oldTasks, newTask];
       });
       // 使行程详情缓存失效
-      queryClient.invalidateQueries({ queryKey: tripQueryKey(newTask.trip_id) });
+      queryClient.invalidateQueries({ queryKey: tripQueryKey(newTask.trip_id), refetchType: 'all' });
     },
   });
 };

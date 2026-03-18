@@ -56,8 +56,8 @@ export const useCreateCity = () => {
       });
     },
     onSettled: () => {
-      // 无论成功或失败，最终都重新验证缓存确保数据一致
-      queryClient.invalidateQueries({ queryKey: CITIES_QUERY_KEY });
+      // refetchType: 'all' 确保即使 refetchOnMount: false 也会重新请求
+      queryClient.invalidateQueries({ queryKey: CITIES_QUERY_KEY, refetchType: 'all' });
     },
   });
 };

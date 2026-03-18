@@ -48,7 +48,7 @@ export const useCreateWishlistItem = () => {
       });
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEY });
+      queryClient.invalidateQueries({ queryKey: WISHLIST_QUERY_KEY, refetchType: 'all' });
     },
   });
 };
