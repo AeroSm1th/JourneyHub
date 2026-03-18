@@ -2,6 +2,7 @@
  * useTrip Hook
  *
  * 获取单个行程详情的查询 Hook（含关联的日程和待办事项）
+ * 验证需求: 11.2, 11.3 - 缓存服务器数据，未过期时直接使用缓存
  */
 
 import { useQuery } from '@tanstack/react-query';
@@ -43,7 +44,7 @@ export const useTrip = (id: string, options?: { enabled?: boolean }) => {
     queryKey: tripQueryKey(id),
     queryFn: () => tripsApi.getById(id),
     enabled: options?.enabled ?? !!id,
-    staleTime: 5 * 60 * 1000, // 5 分钟内数据视为新鲜
-    gcTime: 10 * 60 * 1000, // 10 分钟后清除缓存
+    staleTime: 3 * 60 * 1000, // 3 分钟（与列表保持一致），未过期时直接使用缓存（需求 11.3）
+    cacheTime: 8 * 60 * 1000, // 8 分钟后清除缓存
   });
 };

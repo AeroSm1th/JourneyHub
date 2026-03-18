@@ -5,6 +5,7 @@
  * 集成 authErrorHandler（认证错误自动登出）和 dbErrorHandler（数据库错误精确映射）
  *
  * 验证需求: 9.6, 9.7 - 全局错误处理与日志记录
+ * 验证需求: 11.2, 11.3 - TanStack Query 缓存策略与缓存优先
  */
 
 import { RouterProvider } from 'react-router-dom';
@@ -95,8 +96,16 @@ const queryClient = new QueryClient({
   }),
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000,  // 5 分钟
-      cacheTime: 10 * 60 * 1000,  // 10 分钟
+      // 全局默认缓存策略（各 hook 可按需覆盖）
+      // 需求 11.3：数据已缓存且未过期时直接使用缓存，不发起网络请求
+      staleTime: 5 * 60 * 1000,   // 5 分钟内数据视为新鲜
+      cacheTime: 10 * 60 * 1000,  // 10 分钟后清除未使用的缓存（v4 用 cacheTime，v5 改为 gcTime）
+      // 缓存优先策略：组件挂载时若缓存未过期则不重新获取，减少不必要的网络请求
+      refetchOnMount: false,
+      // 窗口重新聚焦时不自动刷新，避免频繁请求
+      refetchOnWindowFocus: false,
+      // 网络恢复时重新获取，确保离线后数据同步
+      refetchOnReconnect: true,
       retry: (failureCount, error) => {
         // 认证错误和数据库约束错误不重试
         if (isAuthError(error)) return false;
@@ -105,8 +114,6 @@ const queryClient = new QueryClient({
         return failureCount < 3;
       },
       retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000),
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: true,
     },
     mutations: {
       retry: (failureCount, error) => {

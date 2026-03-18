@@ -63,12 +63,21 @@ npm install
 cp .env.example .env
 ```
 
-填入你的 Supabase 项目凭据：
+填入你的项目凭据：
 
 ```env
+# Supabase 项目 URL（从 Supabase 控制台 Settings > API 获取）
 VITE_SUPABASE_URL=https://your-project.supabase.co
+
+# Supabase 匿名密钥（anon/public key）
 VITE_SUPABASE_ANON_KEY=your-anon-key
+
+# 高德地图 Web 服务 API Key（用于反向地理编码）
+# 从 https://console.amap.com/ 创建应用获取
+VITE_AMAP_KEY=your-amap-web-api-key
 ```
+
+> **注意：** `VITE_AMAP_KEY` 用于将地图坐标转换为城市/国家名称。如未配置，反向地理编码功能将不可用，但其他功能不受影响。
 
 ### Supabase 数据库配置
 
@@ -86,9 +95,12 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 | `trip_tasks` | 行程待办事项 |
 | `shares` | 分享记录 |
 
-同时需要在 Supabase Storage 中创建 `avatars` bucket 用于头像上传。
+同时需要在 Supabase Storage 中创建以下 bucket：
 
-详细的存储配置请参考 `.kiro/specs/journey-hub-platform/storage-setup-guide.md`。
+| Bucket | 说明 |
+|--------|------|
+| `city-images` | 城市封面图片（最大 5MB，支持 JPG/PNG/WebP） |
+| `avatars` | 用户头像（最大 5MB，支持 JPG/PNG/WebP） |
 
 ### 启动开发服务器
 

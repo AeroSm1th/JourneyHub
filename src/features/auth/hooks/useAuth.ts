@@ -68,6 +68,15 @@ export function useAuth() {
         setAuth(currentSession.user, currentSession);
       } else if (event === 'USER_UPDATED' && currentSession?.user) {
         setAuth(currentSession.user, currentSession);
+      } else if (event === 'TOKEN_REFRESH_FAILED') {
+        // Refresh token 失效（过期或被撤销），静默清除状态并重定向到登录页
+        // 不抛出错误，避免控制台出现 AuthApiError
+        clearAuth();
+        queryClient.clear();
+        const currentPath = window.location.pathname;
+        if (!currentPath.startsWith('/auth')) {
+          window.location.href = `/auth/login?redirect=${encodeURIComponent(currentPath)}`;
+        }
       }
     });
 
