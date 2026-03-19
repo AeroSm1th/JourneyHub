@@ -33,11 +33,13 @@ export const cityQueryKey = (id: string) => ['cities', id] as const;
  * ```
  */
 export const useCity = (id: string, options?: { enabled?: boolean }) => {
-  return useQuery<City, Error>({
-    queryKey: cityQueryKey(id),
-    queryFn: () => citiesApi.getById(id),
-    enabled: options?.enabled ?? !!id,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-  });
+  return useQuery<City, Error>(
+    cityQueryKey(id),
+    () => citiesApi.getById(id),
+    {
+      enabled: options?.enabled ?? !!id,
+      staleTime: 5 * 60 * 1000,
+      cacheTime: 10 * 60 * 1000,
+    },
+  );
 };

@@ -33,11 +33,13 @@ export const wishlistItemQueryKey = (id: string) => ['wishlist', id] as const;
  * ```
  */
 export const useWishlistItem = (id: string, options?: { enabled?: boolean }) => {
-  return useQuery<WishlistItem, Error>({
-    queryKey: wishlistItemQueryKey(id),
-    queryFn: () => wishlistApi.getById(id),
-    enabled: options?.enabled ?? !!id,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-  });
+  return useQuery<WishlistItem, Error>(
+    wishlistItemQueryKey(id),
+    () => wishlistApi.getById(id),
+    {
+      enabled: options?.enabled ?? !!id,
+      staleTime: 5 * 60 * 1000,
+      cacheTime: 10 * 60 * 1000,
+    },
+  );
 };

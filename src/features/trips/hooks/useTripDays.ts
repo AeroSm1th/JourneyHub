@@ -21,11 +21,13 @@ export const tripDaysQueryKey = (tripId: string) => ['tripDays', tripId] as cons
  * @returns TanStack Query 查询结果
  */
 export const useTripDays = (tripId: string) => {
-  return useQuery<TripDay[], Error>({
-    queryKey: tripDaysQueryKey(tripId),
-    queryFn: () => tripDaysApi.getByTripId(tripId),
-    enabled: !!tripId,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-  });
+  return useQuery<TripDay[], Error>(
+    tripDaysQueryKey(tripId),
+    () => tripDaysApi.getByTripId(tripId),
+    {
+      enabled: !!tripId,
+      staleTime: 5 * 60 * 1000,
+      cacheTime: 10 * 60 * 1000,
+    },
+  );
 };

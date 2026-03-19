@@ -15,8 +15,8 @@
 export interface User {
   id: string;
   email: string;
-  nickname?: string;
-  avatar_url?: string;
+  nickname?: string | null;
+  avatar_url?: string | null;
   created_at: string;
 }
 
@@ -198,51 +198,45 @@ export type TripTaskUpdate = Partial<Omit<TripTask, 'id' | 'trip_id' | 'created_
 // Supabase Database 类型
 // ============================================================================
 
+type RecordLike<T> = T & Record<string, unknown>;
+
+type SupabaseTable<Row extends Record<string, unknown>, Insert extends Record<string, unknown>, Update extends Record<string, unknown>> = {
+  Row: Row;
+  Insert: Insert;
+  Update: Update;
+  Relationships: [];
+};
+
 /**
  * Supabase 数据库完整类型定义
  * 用于 createClient<Database> 的泛型参数
  */
 export interface Database {
   public: {
-    Tables: {
-      users: {
-        Row: User;
-        Insert: Omit<User, 'created_at'>;
-        Update: Partial<Omit<User, 'id' | 'created_at'>>;
-      };
-      cities: {
-        Row: City;
-        Insert: CityInsert;
-        Update: CityUpdate;
-      };
-      wishlist_items: {
-        Row: WishlistItem;
-        Insert: WishlistItemInsert;
-        Update: WishlistItemUpdate;
-      };
-      trips: {
-        Row: Trip;
-        Insert: TripInsert;
-        Update: TripUpdate;
-      };
-      trip_days: {
-        Row: TripDay;
-        Insert: TripDayInsert;
-        Update: TripDayUpdate;
-      };
-      trip_tasks: {
-        Row: TripTask;
-        Insert: TripTaskInsert;
-        Update: TripTaskUpdate;
-      };
-      shares: {
-        Row: Share;
-        Insert: ShareInsert;
-        Update: Partial<Omit<Share, 'id' | 'user_id' | 'created_at'>>;
-      };
+    Tables: Record<string, SupabaseTable<any, any, any>> & {
+      users: SupabaseTable<
+        RecordLike<User>,
+        RecordLike<Omit<User, 'created_at'>>,
+        RecordLike<Partial<Omit<User, 'id' | 'created_at'>>>
+      >;
+      cities: SupabaseTable<RecordLike<City>, RecordLike<CityInsert>, RecordLike<CityUpdate>>;
+      wishlist_items: SupabaseTable<
+        RecordLike<WishlistItem>,
+        RecordLike<WishlistItemInsert>,
+        RecordLike<WishlistItemUpdate>
+      >;
+      trips: SupabaseTable<RecordLike<Trip>, RecordLike<TripInsert>, RecordLike<TripUpdate>>;
+      trip_days: SupabaseTable<RecordLike<TripDay>, RecordLike<TripDayInsert>, RecordLike<TripDayUpdate>>;
+      trip_tasks: SupabaseTable<RecordLike<TripTask>, RecordLike<TripTaskInsert>, RecordLike<TripTaskUpdate>>;
+      shares: SupabaseTable<
+        RecordLike<Share>,
+        RecordLike<ShareInsert>,
+        RecordLike<Partial<Omit<Share, 'id' | 'user_id' | 'created_at'>>>
+      >;
     };
-    Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Views: Record<string, any> & { [_ in never]: never };
+    Functions: Record<string, any> & { [_ in never]: never };
+    CompositeTypes: Record<string, any> & { [_ in never]: never };
     Enums: {
       trip_type: 'leisure' | 'business' | 'transit';
       trip_status: 'planning' | 'ongoing' | 'completed';

@@ -39,11 +39,13 @@ export const tripQueryKey = (id: string) => ['trips', id] as const;
  * ```
  */
 export const useTrip = (id: string, options?: { enabled?: boolean }) => {
-  return useQuery<TripWithRelations, Error>({
-    queryKey: tripQueryKey(id),
-    queryFn: () => tripsApi.getById(id),
-    enabled: options?.enabled ?? !!id,
-    staleTime: 5 * 60 * 1000, // 5 分钟内数据视为新鲜
-    gcTime: 10 * 60 * 1000, // 10 分钟后清除缓存
-  });
+  return useQuery<TripWithRelations, Error>(
+    tripQueryKey(id),
+    () => tripsApi.getById(id),
+    {
+      enabled: options?.enabled ?? !!id,
+      staleTime: 5 * 60 * 1000, // 5 分钟内数据视为新鲜
+      cacheTime: 10 * 60 * 1000, // 10 分钟后清除缓存
+    },
+  );
 };

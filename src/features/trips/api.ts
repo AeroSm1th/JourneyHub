@@ -51,7 +51,7 @@ const getAll = async (): Promise<Trip[]> => {
     throw new Error(`获取行程列表失败: ${error.message}`);
   }
 
-  return data || [];
+  return (data as Trip[] | null) || [];
 };
 
 /**
@@ -76,7 +76,7 @@ const getById = async (id: string): Promise<TripWithRelations> => {
     throw new Error('行程不存在');
   }
 
-  return data as TripWithRelations;
+  return data as unknown as TripWithRelations;
 };
 
 /**
@@ -97,7 +97,7 @@ const create = async (tripData: TripInsert): Promise<Trip> => {
     throw new Error('创建行程失败：未返回数据');
   }
 
-  return data;
+  return data as Trip;
 };
 
 /**
@@ -127,7 +127,7 @@ const update = async (id: string, updates: TripUpdate): Promise<Trip> => {
     throw new Error('更新行程失败：未返回数据');
   }
 
-  return data;
+  return data as Trip;
 };
 
 /**
@@ -168,7 +168,7 @@ const getDaysByTripId = async (tripId: string): Promise<TripDay[]> => {
     throw new Error(`获取行程日程失败: ${error.message}`);
   }
 
-  return data || [];
+  return (data as TripDay[] | null) || [];
 };
 
 /**
@@ -189,7 +189,7 @@ const createDay = async (dayData: TripDayInsert): Promise<TripDay> => {
     throw new Error('创建行程日程失败：未返回数据');
   }
 
-  return data;
+  return data as TripDay;
 };
 
 /**
@@ -216,7 +216,7 @@ const updateDay = async (id: string, updates: TripDayUpdate): Promise<TripDay> =
     throw new Error('更新行程日程失败：未返回数据');
   }
 
-  return data;
+  return data as TripDay;
 };
 
 /**
@@ -257,7 +257,7 @@ const getTasksByTripId = async (tripId: string): Promise<TripTask[]> => {
     throw new Error(`获取待办事项失败: ${error.message}`);
   }
 
-  return data || [];
+  return (data as TripTask[] | null) || [];
 };
 
 /**
@@ -278,7 +278,7 @@ const createTask = async (taskData: TripTaskInsert): Promise<TripTask> => {
     throw new Error('创建待办事项失败：未返回数据');
   }
 
-  return data;
+  return data as TripTask;
 };
 
 /**
@@ -305,7 +305,7 @@ const updateTask = async (id: string, updates: TripTaskUpdate): Promise<TripTask
     throw new Error('更新待办事项失败：未返回数据');
   }
 
-  return data;
+  return data as TripTask;
 };
 
 /**

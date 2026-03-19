@@ -24,8 +24,15 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "allowJs": true
   },
   "include": ["src"],
+  "exclude": [
+    "src/**/*.example.*",
+    "src/**/*.integration.example.*",
+    "src/tests/**"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
+
 }

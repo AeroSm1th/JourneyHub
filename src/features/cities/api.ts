@@ -27,7 +27,7 @@ export const getAll = async (): Promise<City[]> => {
     throw new Error(`获取城市列表失败: ${error.message}`);
   }
 
-  return data || [];
+  return (data as City[] | null) || [];
 };
 
 /**
@@ -48,7 +48,7 @@ export const getById = async (id: string): Promise<City> => {
     throw new Error('城市记录不存在');
   }
 
-  return data;
+  return data as City;
 };
 
 /**
@@ -69,7 +69,7 @@ export const create = async (cityData: CityInsert): Promise<City> => {
     throw new Error('创建城市记录失败：未返回数据');
   }
 
-  return data;
+  return data as City;
 };
 
 /**
@@ -99,7 +99,7 @@ export const update = async (id: string, updates: Partial<CityInsert>): Promise<
     throw new Error('更新城市记录失败：未返回数据');
   }
 
-  return data;
+  return data as City;
 };
 
 /**
@@ -195,7 +195,7 @@ export const search = async (params: CitySearchParams): Promise<City[]> => {
     throw new Error(`搜索城市记录失败: ${error.message}`);
   }
 
-  return data || [];
+  return (data as City[] | null) || [];
 };
 
 /**
@@ -290,8 +290,9 @@ export const batchDelete = async (ids: string[]): Promise<void> => {
   }
 
   // 清理 Storage 中的封面图片
-  if (cities && cities.length > 0) {
-    const filePaths = cities
+  const typedCities = cities as Array<Pick<City, 'cover_image'>> | null;
+  if (typedCities && typedCities.length > 0) {
+    const filePaths = typedCities
       .map((c) => (c.cover_image ? extractStoragePath(c.cover_image, 'city-images') : null))
       .filter((p): p is string => p !== null);
 

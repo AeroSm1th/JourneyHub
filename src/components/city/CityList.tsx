@@ -9,7 +9,6 @@
 
 import { useCities } from '@/features/cities/hooks/useCities';
 import { Spinner } from '@/components/common/Spinner';
-import { VirtualList } from '@/components/common/VirtualList';
 import { City } from '@/types/database';
 import './CityList.css';
 
@@ -138,9 +137,6 @@ export function CityList({ onCityClick, selectedCityId }: CityListProps) {
     return new Date(b.visited_at).getTime() - new Date(a.visited_at).getTime();
   });
 
-  // 超过 20 条时启用虚拟滚动（需求 11.5）
-  const useVirtual = sortedCities.length > 20;
-
   return (
     <div className="city-list-container">
       <div className="city-list-header">
@@ -148,33 +144,16 @@ export function CityList({ onCityClick, selectedCityId }: CityListProps) {
         <span className="city-list-count">{cities.length} 个足迹</span>
       </div>
 
-      {useVirtual ? (
-        <VirtualList
-          items={sortedCities}
-          estimateSize={100}
-          overscan={5}
-          className="city-list"
-          getItemKey={(index) => sortedCities[index].id}
-          renderItem={(city) => (
-            <CityListItem
-              city={city}
-              isSelected={selectedCityId === city.id}
-              onClick={() => onCityClick?.(city)}
-            />
-          )}
-        />
-      ) : (
-        <ul className="city-list">
-          {sortedCities.map((city) => (
-            <CityListItem
-              key={city.id}
-              city={city}
-              isSelected={selectedCityId === city.id}
-              onClick={() => onCityClick?.(city)}
-            />
-          ))}
-        </ul>
-      )}
+      <ul className="city-list">
+        {sortedCities.map((city) => (
+          <CityListItem
+            key={city.id}
+            city={city}
+            isSelected={selectedCityId === city.id}
+            onClick={() => onCityClick?.(city)}
+          />
+        ))}
+      </ul>
     </div>
   );
 }

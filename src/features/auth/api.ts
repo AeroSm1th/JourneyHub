@@ -105,7 +105,7 @@ export async function signIn(email: string, password: string): Promise<User> {
 
   // 如果 users 表有记录则返回完整资料，否则回退到 auth 基础信息
   if (profile) {
-    return profile;
+    return profile as User;
   }
 
   return {
@@ -169,7 +169,7 @@ export async function getCurrentUser(): Promise<User | null> {
     .single();
 
   if (profile) {
-    return profile;
+    return profile as User;
   }
 
   return {

@@ -31,7 +31,7 @@ export async function getProfile(userId: string): Promise<User> {
     throw new Error('用户不存在');
   }
 
-  return data;
+  return data as User;
 }
 
 /**
@@ -58,7 +58,7 @@ export async function updateProfile(userId: string, data: { nickname?: string })
     throw new Error('更新用户资料失败：未返回数据');
   }
 
-  return updated;
+  return updated as User;
 }
 
 /**
@@ -137,7 +137,7 @@ export async function updateAvatar(userId: string, avatarUrl: string): Promise<U
     throw new Error('更新头像失败：未返回数据');
   }
 
-  return data;
+  return data as User;
 }
 
 /**
@@ -173,7 +173,7 @@ export async function clearAllData(userId: string): Promise<void> {
   // 获取行程 ID
   const { data: trips } = await supabase.from('trips').select('id').eq('user_id', userId);
 
-  const tripIds = (trips || []).map((t) => t.id);
+  const tripIds = ((trips as Array<{ id: string }> | null) || []).map((t) => t.id);
 
   // 删除行程子表
   if (tripIds.length > 0) {
@@ -240,7 +240,7 @@ export async function exportUserData(userId: string): Promise<Record<string, unk
     throw new Error(`导出行程失败: ${tripsError.message}`);
   }
 
-  const tripIds = trips?.map((t) => t.id) || [];
+  const tripIds = ((trips as Array<{ id: string }> | null) || []).map((t) => t.id);
 
   let tripDays: unknown[] = [];
   let tripTasks: unknown[] = [];

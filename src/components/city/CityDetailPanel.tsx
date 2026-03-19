@@ -88,7 +88,6 @@ const formatTripType = (tripType: string): string => {
  */
 export function CityDetailPanel({
   city,
-  onEdit,
   onDeleteSuccess,
   onClose,
   onBack,

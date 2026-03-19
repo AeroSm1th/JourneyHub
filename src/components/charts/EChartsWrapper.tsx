@@ -8,7 +8,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
-import * as echarts from 'echarts/core';
+import * as echarts from 'echarts';
 import { journeyhubTheme, JOURNEYHUB_THEME_NAME } from './echarts-theme';
 import { Spinner } from '@/components/common/Spinner';
 import './EChartsWrapper.css';

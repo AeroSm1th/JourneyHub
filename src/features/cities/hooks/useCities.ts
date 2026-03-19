@@ -38,10 +38,12 @@ export const CITIES_QUERY_KEY = ['cities'] as const;
  * ```
  */
 export const useCities = () => {
-  return useQuery<City[], Error>({
-    queryKey: CITIES_QUERY_KEY,
-    queryFn: citiesApi.getAll,
-    staleTime: 5 * 60 * 1000, // 5 分钟内数据视为新鲜
-    gcTime: 10 * 60 * 1000, // 10 分钟后清除缓存（原 cacheTime）
-  });
+  return useQuery<City[], Error>(
+    CITIES_QUERY_KEY,
+    citiesApi.getAll,
+    {
+      staleTime: 5 * 60 * 1000, // 5 分钟内数据视为新鲜
+      cacheTime: 10 * 60 * 1000, // 10 分钟后清除缓存
+    },
+  );
 };

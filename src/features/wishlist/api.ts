@@ -25,7 +25,7 @@ export const getAll = async (): Promise<WishlistItem[]> => {
     throw new Error(`获取愿望清单失败: ${error.message}`);
   }
 
-  return data || [];
+  return (data as WishlistItem[] | null) || [];
 };
 
 /**
@@ -46,7 +46,7 @@ export const getById = async (id: string): Promise<WishlistItem> => {
     throw new Error('愿望清单项目不存在');
   }
 
-  return data;
+  return data as WishlistItem;
 };
 
 /**
@@ -67,7 +67,7 @@ export const create = async (itemData: WishlistItemInsert): Promise<WishlistItem
     throw new Error('创建愿望清单项目失败：未返回数据');
   }
 
-  return data;
+  return data as WishlistItem;
 };
 
 /**
@@ -94,7 +94,7 @@ export const update = async (id: string, updates: WishlistItemUpdate): Promise<W
     throw new Error('更新愿望清单项目失败：未返回数据');
   }
 
-  return data;
+  return data as WishlistItem;
 };
 
 /**

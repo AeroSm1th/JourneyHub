@@ -38,10 +38,12 @@ export const WISHLIST_QUERY_KEY = ['wishlist'] as const;
  * ```
  */
 export const useWishlist = () => {
-  return useQuery<WishlistItem[], Error>({
-    queryKey: WISHLIST_QUERY_KEY,
-    queryFn: wishlistApi.getAll,
-    staleTime: 5 * 60 * 1000, // 5 分钟内数据视为新鲜
-    gcTime: 10 * 60 * 1000, // 10 分钟后清除缓存
-  });
+  return useQuery<WishlistItem[], Error>(
+    WISHLIST_QUERY_KEY,
+    wishlistApi.getAll,
+    {
+      staleTime: 5 * 60 * 1000, // 5 分钟内数据视为新鲜
+      cacheTime: 10 * 60 * 1000, // 10 分钟后清除缓存
+    },
+  );
 };

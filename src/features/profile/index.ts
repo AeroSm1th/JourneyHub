@@ -7,6 +7,5 @@ export {
   updateProfile,
   uploadAvatar,
   updateAvatar,
-  deleteAccount,
   exportUserData,
 } from './api';

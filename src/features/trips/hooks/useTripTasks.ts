@@ -21,11 +21,13 @@ export const tripTasksQueryKey = (tripId: string) => ['tripTasks', tripId] as co
  * @returns TanStack Query 查询结果
  */
 export const useTripTasks = (tripId: string) => {
-  return useQuery<TripTask[], Error>({
-    queryKey: tripTasksQueryKey(tripId),
-    queryFn: () => tripTasksApi.getByTripId(tripId),
-    enabled: !!tripId,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-  });
+  return useQuery<TripTask[], Error>(
+    tripTasksQueryKey(tripId),
+    () => tripTasksApi.getByTripId(tripId),
+    {
+      enabled: !!tripId,
+      staleTime: 5 * 60 * 1000,
+      cacheTime: 10 * 60 * 1000,
+    },
+  );
 };
